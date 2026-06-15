@@ -63,6 +63,70 @@ function extractCode(text: string): string {
   return m ? m[1] : ''
 }
 
+/**
+ * Recognized material/group prefix markers that appear right after the numeric
+ * model code in column B. Each represents a different material line that the
+ * business treats as a separate, separately-priced product card:
+ *   Е/E — екошкіра, З — замша, Р — рептилія (and combinations like ЗР, ЕР).
+ * Latin "E" is normalized to Cyrillic "Е".
+ */
+function normalizePrefix(raw: string): string {
+  return raw.toUpperCase().replace(/E/g, 'Е') // Latin E → Cyrillic Е
+}
+
+export interface ParsedProductText {
+  /** Grouping code used as products.code — e.g. "5304-Е" or "5304" (no prefix). */
+  code: string
+  /** Numeric base model code — e.g. "5304". */
+  baseCode: string
+  /** Material/group prefix — e.g. "Е" | "ЗР" | null when absent. */
+  prefix: string | null
+  /** Remaining color/variant text after the prefix — e.g. "бордо". */
+  color: string
+}
+
+/**
+ * Splits the raw product text from column B into base code + material/group
+ * prefix + color. This is what gives each material group its own editable
+ * product card.
+ *
+ *   "5304 Е бордо"   → { code: "5304-Е", baseCode: "5304", prefix: "Е", color: "бордо" }
+ *   "5304-З беж"     → { code: "5304-З", baseCode: "5304", prefix: "З", color: "беж" }
+ *   "5304 ЗР чорний" → { code: "5304-ЗР", baseCode: "5304", prefix: "ЗР", color: "чорний" }
+ *   "1234 чорний"    → { code: "1234",   baseCode: "1234", prefix: null, color: "чорний" }
+ *
+ * When no numeric code or no recognized prefix is found, it falls back to the
+ * previous behavior (group by the whole leading token).
+ */
+export function parseProductText(text: string): ParsedProductText {
+  const t = text.trim().replace(/\s+/g, ' ')
+
+  const codeMatch = t.match(/^(\d+)/)
+  if (!codeMatch) {
+    // No numeric code — keep legacy behavior: first token is the code.
+    const token = extractCode(t)
+    const color = t.slice(token.length).trim() || '—'
+    return { code: token, baseCode: token, prefix: null, color }
+  }
+
+  const baseCode = codeMatch[1]
+  const rest = t.slice(baseCode.length).replace(/^[\s\-–/]+/, '')
+
+  // Material/group prefix: 1–2 letters drawn only from the material marker set
+  // {Е, E, З, Р}, terminated by whitespace, end, or a separator. Colors like
+  // "беж", "бордо", "чорний" never match because they start outside this set.
+  const prefixMatch = rest.match(/^([ЕEЗРеeзр]{1,2})(?=\s|$|[-–/])/)
+  if (prefixMatch) {
+    const prefix = normalizePrefix(prefixMatch[1])
+    const color = rest.slice(prefixMatch[1].length).replace(/^[\s\-–/]+/, '').trim() || '—'
+    return { code: `${baseCode}-${prefix}`, baseCode, prefix, color }
+  }
+
+  // Numeric code but no material prefix — keep grouping by base code.
+  const color = rest.trim() || '—'
+  return { code: baseCode, baseCode, prefix: null, color }
+}
+
 function normalizeKey(s: string): string {
   return s
     .toLowerCase()
@@ -117,17 +181,18 @@ export function parseCSV(text: string): { variants: ParsedVariant[]; skipped: nu
       continue
     }
 
-    const code = extractCode(product)
-    if (!code) {
+    const parsed = parseProductText(product)
+    if (!parsed.code) {
       skipped++
       continue
     }
 
-    const color = product.slice(code.length).trim() || '—'
     variants.push({
-      code,
-      color,
+      code: parsed.code,
+      color: parsed.color,
       source_text: product,
+      // Key stays the normalized FULL source text so re-syncs match the same
+      // variant row regardless of grouping changes.
       normalized_key: normalizeKey(product),
       quantity: parseQuantity(qty),
     })
@@ -146,7 +211,6 @@ async function fetchAll(
   const pageSize = 1000
   let from = 0
   const all: any[] = []
-  // Supabase caps rows at 1000 per request — paginate with range().
   for (;;) {
     const { data, error } = await supabase
       .from(table)
@@ -161,6 +225,12 @@ async function fetchAll(
   return all
 }
 
+function chunk<T>(arr: T[], size: number): T[][] {
+  const out: T[][] = []
+  for (let i = 0; i < arr.length; i += size) out.push(arr.slice(i, i + size))
+  return out
+}
+
 /**
  * Applies parsed sheet rows to the database.
  *
@@ -168,6 +238,12 @@ async function fetchAll(
  * It NEVER overwrites manually-entered price_retail, price_drop, description,
  * material, size_text, category, photos or name. New products/variants created
  * from the sheet start with prices = 0 (to be filled in the admin).
+ *
+ * PERFORMANCE: uses bulk operations to avoid N×M sequential round-trips:
+ *   - 2 UPDATE queries for stock status (grouped by in_stock / out_of_stock)
+ *   - 1 batch INSERT for new products
+ *   - parallel batched UPDATEs (20 concurrent) for variant quantities
+ *   - 1-few batch INSERTs for new variants
  */
 export async function runImportFromVariants(
   variants: ParsedVariant[],
@@ -183,21 +259,27 @@ export async function runImportFromVariants(
     byCode.set(v.code, list)
   }
 
-  // Load existing products + variants once
-  const existingProducts = await fetchAll(supabase, 'products', 'id, code')
+  // ── 1. Load all existing data in parallel ────────────────────────────────
+  const [existingProducts, existingVariants] = await Promise.all([
+    fetchAll(supabase, 'products', 'id, code'),
+    fetchAll(supabase, 'product_variants', 'id, product_id, normalized_source_key'),
+  ])
+
   const productByCode = new Map<string, { id: string }>(
     existingProducts.map((p: any) => [p.code, { id: p.id }])
   )
+  const vKey = (pid: string, key: string | null) => `${pid}::${key ?? ''}`
+  const variantById = new Map<string, string>(
+    existingVariants.map((v: any) => [vKey(v.product_id, v.normalized_source_key), v.id])
+  )
 
-  const existingVariants = await fetchAll(
-    supabase,
-    'product_variants',
-    'id, product_id, normalized_source_key'
-  )
-  const variantKey = (pid: string, key: string | null) => `${pid}::${key ?? ''}`
-  const variantMap = new Map<string, { id: string }>(
-    existingVariants.map((v: any) => [variantKey(v.product_id, v.normalized_source_key), { id: v.id }])
-  )
+  // ── 2. Classify all work to be done ─────────────────────────────────────
+  const newProductRows: object[]              = []
+  const newProductVariants                    = new Map<string, ParsedVariant[]>() // code → variants
+  const inStockIds: string[]                  = []
+  const outOfStockIds: string[]               = []
+  const variantUpdates: { id: string; quantity: number }[] = []
+  const newVariantRows: object[]              = []
 
   let productsCreated = 0
   let productsUpdated = 0
@@ -206,80 +288,105 @@ export async function runImportFromVariants(
 
   for (const [code, group] of byCode) {
     const totalQty = group.reduce((s, v) => s + v.quantity, 0)
-    const stock_status = totalQty > 0 ? 'in_stock' : 'out_of_stock'
+    const stock_status: 'in_stock' | 'out_of_stock' = totalQty > 0 ? 'in_stock' : 'out_of_stock'
     const existing = productByCode.get(code)
 
     if (!existing) {
-      // Create new product — prices stay 0, to be filled in admin
-      const { data, error } = await supabase
-        .from('products')
-        .insert({
-          code,
-          name: `Товар ${code}`,
-          description: '',
-          material: '',
-          size_text: '',
-          category: '',
-          price_retail: 0,
-          price_drop: 0,
-          is_active: true,
-          stock_status,
-        })
-        .select('id')
-        .single()
-
-      if (error || !data) {
-        errors.push(`Создание товара ${code}: ${error?.message ?? 'нет данных'}`)
-        continue
-      }
-      productsCreated++
-
-      const rows = group.map((v) => ({
-        product_id: data.id,
-        color: v.color,
-        quantity: v.quantity,
-        reserved_quantity: 0,
-        source_text: v.source_text,
-        normalized_source_key: v.normalized_key,
-      }))
-      const { error: ve } = await supabase.from('product_variants').insert(rows)
-      if (ve) errors.push(`Варианты товара ${code}: ${ve.message}`)
-      else variantsCreated += rows.length
+      // New product — prices stay 0, to be filled in admin
+      newProductRows.push({ code, name: `Товар ${code}`, description: '', material: '',
+        size_text: '', category: '', price_retail: 0, price_drop: 0, is_active: true, stock_status })
+      newProductVariants.set(code, group)
     } else {
-      // Existing product — update ONLY stock flag, never prices/text
-      const { error: pe } = await supabase
-        .from('products')
-        .update({ stock_status, is_active: true })
-        .eq('id', existing.id)
-      if (pe) errors.push(`Обновление товара ${code}: ${pe.message}`)
-      else productsUpdated++
+      // Existing product — only stock flag changes
+      if (stock_status === 'in_stock') inStockIds.push(existing.id)
+      else outOfStockIds.push(existing.id)
+      productsUpdated++
 
       for (const v of group) {
-        const match = variantMap.get(variantKey(existing.id, v.normalized_key))
-        if (match) {
-          const { error: ue } = await supabase
-            .from('product_variants')
-            .update({ quantity: v.quantity })
-            .eq('id', match.id)
-          if (ue) errors.push(`Вариант ${code}/${v.color}: ${ue.message}`)
-          else variantsUpdated++
+        const varId = variantById.get(vKey(existing.id, v.normalized_key))
+        if (varId) {
+          variantUpdates.push({ id: varId, quantity: v.quantity })
+          variantsUpdated++
         } else {
-          const { error: ie } = await supabase.from('product_variants').insert({
-            product_id: existing.id,
-            color: v.color,
-            quantity: v.quantity,
-            reserved_quantity: 0,
-            source_text: v.source_text,
-            normalized_source_key: v.normalized_key,
-          })
-          if (ie) errors.push(`Новый вариант ${code}/${v.color}: ${ie.message}`)
-          else variantsCreated++
+          newVariantRows.push({ product_id: existing.id, color: v.color,
+            quantity: v.quantity, reserved_quantity: 0,
+            source_text: v.source_text, normalized_source_key: v.normalized_key })
+          variantsCreated++
         }
       }
     }
   }
 
-  // Verification count
+  // ── 3a. Bulk stock-status updates — 2 queries instead of N ──────────────
+  // Chunk to stay under URL/query limits (Supabase handles large .in() fine,
+  // but we chunk at 1000 just to be safe with very large catalogues).
+  const stockOps = [
+    ...chunk(inStockIds, 1000).map((ids) =>
+      supabase.from('products').update({ stock_status: 'in_stock', is_active: true }).in('id', ids)
+    ),
+    ...chunk(outOfStockIds, 1000).map((ids) =>
+      supabase.from('products').update({ stock_status: 'out_of_stock', is_active: true }).in('id', ids)
+    ),
+  ]
+
+  // ── 3b. Batch insert new products, then build their variant rows ─────────
+  const createdMap = new Map<string, string>() // code → id
+  if (newProductRows.length > 0) {
+    const { data, error } = await supabase
+      .from('products')
+      .insert(newProductRows)
+      .select('id, code')
+    if (error) {
+      errors.push(`Создание новых товаров: ${error.message}`)
+    } else {
+      productsCreated = (data ?? []).length
+      for (const p of (data ?? [])) createdMap.set(p.code, p.id)
+    }
+  }
+
+  const newProductVariantRows: object[] = []
+  for (const [code, group] of newProductVariants) {
+    const pid = createdMap.get(code)
+    if (!pid) continue
+    for (const v of group) {
+      newProductVariantRows.push({ product_id: pid, color: v.color,
+        quantity: v.quantity, reserved_quantity: 0,
+        source_text: v.source_text, normalized_source_key: v.normalized_key })
+      variantsCreated++
+    }
+  }
+
+  // ── 3c. Parallel variant quantity updates — batches of 20 concurrent ────
+  // Sequential over batch groups, 20 concurrent within each batch.
+  // With ~2500 variants: 125 rounds × ~200 ms each = ~25 s (vs ~580 s sequential).
+  const CONCURRENCY = 20
+  const updateBatches = chunk(variantUpdates, CONCURRENCY)
+  for (const batch of updateBatches) {
+    const results = await Promise.all(
+      batch.map(({ id, quantity }) =>
+        supabase.from('product_variants').update({ quantity }).eq('id', id)
+      )
+    )
+    for (const { error } of results) {
+      if (error) errors.push(`Обновление варианта: ${error.message}`)
+    }
+  }
+
+  // ── 3d. Run stock ops + new variant inserts in parallel ──────────────────
+  const allNewVariantRows = [...newVariantRows, ...newProductVariantRows]
+  const insertOps = chunk(allNewVariantRows, 500).map((rows) =>
+    supabase.from('product_variants').insert(rows)
+  )
+
+  const allParallelOps = [...stockOps, ...insertOps]
+  if (allParallelOps.length > 0) {
+    const results = await Promise.all(allParallelOps)
+    for (const { error } of results as any[]) {
+      if (error) errors.push(`Массовая операция: ${error.message}`)
+    }
+  }
+
+  // ── 4. Verification count ────────────────────────────────────────────────
   const { count } = await supabase
     .from('products')
     .select('*', { count: 'exact', head: true })

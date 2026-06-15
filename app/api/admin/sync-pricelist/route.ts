@@ -3,7 +3,7 @@ import { requireAdmin } from '@/lib/admin-auth'
 import { parseCSV, runImportFromVariants, resolveGoogleSheetsCSVUrl } from '@/lib/pricelist-import'
 
 export const runtime = 'nodejs'
-export const maxDuration = 60
+export const maxDuration = 300
 export const dynamic = 'force-dynamic'
 
 function safeLogUrl(url: string): string {
