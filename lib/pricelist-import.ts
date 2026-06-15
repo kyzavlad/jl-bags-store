@@ -63,6 +63,70 @@ function extractCode(text: string): string {
   return m ? m[1] : ''
 }
 
+/**
+ * Recognized material/group prefix markers that appear right after the numeric
+ * model code in column B. Each represents a different material line that the
+ * business treats as a separate, separately-priced product card:
+ *   Е/E — екошкіра, З — замша, Р — рептилія (and combinations like ЗР, ЕР).
+ * Latin "E" is normalized to Cyrillic "Е".
+ */
+function normalizePrefix(raw: string): string {
+  return raw.toUpperCase().replace(/E/g, 'Е') // Latin E → Cyrillic Е
+}
+
+export interface ParsedProductText {
+  /** Grouping code used as products.code — e.g. "5304-Е" or "5304" (no prefix). */
+  code: string
+  /** Numeric base model code — e.g. "5304". */
+  baseCode: string
+  /** Material/group prefix — e.g. "Е" | "ЗР" | null when absent. */
+  prefix: string | null
+  /** Remaining color/variant text after the prefix — e.g. "бордо". */
+  color: string
+}
+
+/**
+ * Splits the raw product text from column B into base code + material/group
+ * prefix + color. This is what gives each material group its own editable
+ * product card.
+ *
+ *   "5304 Е бордо"   → { code: "5304-Е", baseCode: "5304", prefix: "Е", color: "бордо" }
+ *   "5304-З беж"     → { code: "5304-З", baseCode: "5304", prefix: "З", color: "беж" }
+ *   "5304 ЗР чорний" → { code: "5304-ЗР", baseCode: "5304", prefix: "ЗР", color: "чорний" }
+ *   "1234 чорний"    → { code: "1234",   baseCode: "1234", prefix: null, color: "чорний" }
+ *
+ * When no numeric code or no recognized prefix is found, it falls back to the
+ * previous behavior (group by the whole leading token).
+ */
+export function parseProductText(text: string): ParsedProductText {
+  const t = text.trim().replace(/\s+/g, ' ')
+
+  const codeMatch = t.match(/^(\d+)/)
+  if (!codeMatch) {
+    // No numeric code — keep legacy behavior: first token is the code.
+    const token = extractCode(t)
+    const color = t.slice(token.length).trim() || '—'
+    return { code: token, baseCode: token, prefix: null, color }
+  }
+
+  const baseCode = codeMatch[1]
+  const rest = t.slice(baseCode.length).replace(/^[\s\-–/]+/, '')
+
+  // Material/group prefix: 1–2 letters drawn only from the material marker set
+  // {Е, E, З, Р}, terminated by whitespace, end, or a separator. Colors like
+  // "беж", "бордо", "чорний" never match because they start outside this set.
+  const prefixMatch = rest.match(/^([ЕEЗРеeзр]{1,2})(?=\s|$|[-–/])/)
+  if (prefixMatch) {
+    const prefix = normalizePrefix(prefixMatch[1])
+    const color = rest.slice(prefixMatch[1].length).replace(/^[\s\-–/]+/, '').trim() || '—'
+    return { code: `${baseCode}-${prefix}`, baseCode, prefix, color }
+  }
+
+  // Numeric code but no material prefix — keep grouping by base code.
+  const color = rest.trim() || '—'
+  return { code: baseCode, baseCode, prefix: null, color }
+}
+
 function normalizeKey(s: string): string {
   return s
     .toLowerCase()
@@ -117,17 +181,18 @@ export function parseCSV(text: string): { variants: ParsedVariant[]; skipped: nu
       continue
     }
 
-    const code = extractCode(product)
-    if (!code) {
+    const parsed = parseProductText(product)
+    if (!parsed.code) {
       skipped++
       continue
     }
 
-    const color = product.slice(code.length).trim() || '—'
     variants.push({
-      code,
-      color,
+      code: parsed.code,
+      color: parsed.color,
       source_text: product,
+      // Key stays the normalized FULL source text so re-syncs match the same
+      // variant row regardless of grouping changes.
       normalized_key: normalizeKey(product),
       quantity: parseQuantity(qty),
     })
