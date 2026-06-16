@@ -5,10 +5,11 @@ import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
 import type { User } from '@supabase/supabase-js'
 import { supabase } from '@/lib/supabase/client'
-import { Package, Upload, Settings, LogOut } from 'lucide-react'
+import { Package, Upload, Settings, LogOut, Tags } from 'lucide-react'
 
 const NAV = [
   { href: '/admin/products', icon: Package, label: 'Товары' },
+  { href: '/admin/categories', icon: Tags, label: 'Категории' },
   { href: '/admin/import', icon: Upload, label: 'Импорт' },
   { href: '/admin/settings', icon: Settings, label: 'Настройки' },
 ]

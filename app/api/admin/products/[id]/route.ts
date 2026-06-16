@@ -21,6 +21,16 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
   const totalQty = variants.reduce((s, v) => s + (Number(v.quantity) || 0), 0)
   const stock_status = totalQty > 0 ? 'in_stock' : 'out_of_stock'
 
+  // Resolve category: the editor sends category_id from the dropdown; we
+  // denormalize the name into the text `category` column so anything reading it
+  // keeps working. Empty selection clears both.
+  const categoryId = body.category_id ? String(body.category_id) : null
+  let categoryName = ''
+  if (categoryId) {
+    const { data: cat } = await supabase.from('categories').select('name').eq('id', categoryId).maybeSingle()
+    categoryName = cat?.name ?? (body.category ?? '')
+  }
+
   // 1. Update product fields (admin-controlled, full overwrite)
   const { error: pe } = await supabase
     .from('products')
@@ -30,7 +40,8 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
       description: body.description ?? '',
       material: body.material ?? '',
       size_text: body.size_text ?? '',
-      category: body.category ?? '',
+      category: categoryName,
+      category_id: categoryId,
       price_retail: Number(body.price_retail) || 0,
       price_drop: Number(body.price_drop) || 0,
       is_active: body.is_active ?? true,

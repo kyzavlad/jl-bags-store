@@ -13,7 +13,12 @@ export async function adminFetch(input: string, init: RequestInit = {}): Promise
 
   const headers = new Headers(init.headers)
   headers.set('Authorization', `Bearer ${token}`)
-  if (init.body && !headers.has('Content-Type')) headers.set('Content-Type', 'application/json')
+  // Only default to JSON for non-FormData bodies — FormData needs the browser
+  // to set its own multipart boundary, so we must not override Content-Type.
+  const isFormData = typeof FormData !== 'undefined' && init.body instanceof FormData
+  if (init.body && !isFormData && !headers.has('Content-Type')) {
+    headers.set('Content-Type', 'application/json')
+  }
 
   return fetch(input, { ...init, headers })
 }

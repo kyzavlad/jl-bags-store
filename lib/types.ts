@@ -21,6 +21,17 @@ export interface ProductPhoto {
   created_at?: string
 }
 
+export interface Category {
+  id: string
+  name: string
+  slug: string
+  sort_order: number
+  is_active: boolean
+  created_at?: string
+  updated_at?: string
+  product_count?: number
+}
+
 export interface Product {
   id: string
   code: string
@@ -29,6 +40,7 @@ export interface Product {
   material: string | null
   size_text: string | null
   category: string | null
+  category_id: string | null
   price_retail: number
   price_drop: number
   is_active: boolean
