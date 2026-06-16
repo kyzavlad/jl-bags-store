@@ -87,26 +87,27 @@ export interface ParsedProductText {
 
 /**
  * Splits the raw product text from column B into base code + material/group
- * prefix + color. This is what gives each material group its own editable
- * product card.
+ * prefix + color, and builds a unique product code at the COLOR level. Every
+ * source row becomes its own independent product card.
  *
- *   "5304 Е бордо"   → { code: "5304-Е", baseCode: "5304", prefix: "Е", color: "бордо" }
- *   "5304-З беж"     → { code: "5304-З", baseCode: "5304", prefix: "З", color: "беж" }
- *   "5304 ЗР чорний" → { code: "5304-ЗР", baseCode: "5304", prefix: "ЗР", color: "чорний" }
- *   "1234 чорний"    → { code: "1234",   baseCode: "1234", prefix: null, color: "чорний" }
+ *   "5304 Е беж"     → { code: "5304-Е беж",  baseCode: "5304", prefix: "Е",  color: "беж" }
+ *   "5304 Р шоколад" → { code: "5304-Р шоколад", baseCode: "5304", prefix: "Р", color: "шоколад" }
+ *   "5404 ЗР лате"   → { code: "5404-ЗР лате", baseCode: "5404", prefix: "ЗР", color: "лате" }
+ *   "1234 чорний"    → { code: "1234 чорний", baseCode: "1234", prefix: null, color: "чорний" }
  *
- * When no numeric code or no recognized prefix is found, it falls back to the
- * previous behavior (group by the whole leading token).
+ * When no numeric code or no recognized prefix is found, the code still
+ * includes the color so each row maps to a distinct product.
  */
 export function parseProductText(text: string): ParsedProductText {
   const t = text.trim().replace(/\s+/g, ' ')
 
   const codeMatch = t.match(/^(\d+)/)
   if (!codeMatch) {
-    // No numeric code — keep legacy behavior: first token is the code.
+    // No numeric code — first token is the base, color is the remainder.
     const token = extractCode(t)
     const color = t.slice(token.length).trim() || '—'
-    return { code: token, baseCode: token, prefix: null, color }
+    const code = color === '—' ? token : `${token} ${color}`
+    return { code, baseCode: token, prefix: null, color }
   }
 
   const baseCode = codeMatch[1]
@@ -119,12 +120,14 @@ export function parseProductText(text: string): ParsedProductText {
   if (prefixMatch) {
     const prefix = normalizePrefix(prefixMatch[1])
     const color = rest.slice(prefixMatch[1].length).replace(/^[\s\-–/]+/, '').trim() || '—'
-    return { code: `${baseCode}-${prefix}`, baseCode, prefix, color }
+    const code = color === '—' ? `${baseCode}-${prefix}` : `${baseCode}-${prefix} ${color}`
+    return { code, baseCode, prefix, color }
   }
 
-  // Numeric code but no material prefix — keep grouping by base code.
+  // Numeric code but no material prefix — one product per code + color.
   const color = rest.trim() || '—'
-  return { code: baseCode, baseCode, prefix: null, color }
+  const code = color === '—' ? baseCode : `${baseCode} ${color}`
+  return { code, baseCode, prefix: null, color }
 }
 
 function normalizeKey(s: string): string {
@@ -292,8 +295,9 @@ export async function runImportFromVariants(
     const existing = productByCode.get(code)
 
     if (!existing) {
-      // New product — prices stay 0, to be filled in admin
-      newProductRows.push({ code, name: `Товар ${code}`, description: '', material: '',
+      // New product — title defaults to the full code (e.g. "5304-Е беж");
+      // prices stay 0, all text fields blank, to be filled in admin.
+      newProductRows.push({ code, name: code, description: '', material: '',
         size_text: '', category: '', price_retail: 0, price_drop: 0, is_active: true, stock_status })
       newProductVariants.set(code, group)
     } else {
