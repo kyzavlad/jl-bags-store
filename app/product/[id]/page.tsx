@@ -117,15 +117,17 @@ export default async function ProductPage({ params }: Props) {
       />
       <SiteHeader />
       <main className="min-h-screen bg-white">
-        <div className="max-w-5xl mx-auto px-4 py-8">
+        <div className="max-w-5xl mx-auto px-6 py-10">
           {/* Breadcrumb */}
-          <nav className="text-sm text-gray-500 mb-6 flex flex-wrap gap-1 items-center" aria-label="Breadcrumb">
-            <Link href="/" className="hover:underline">JL Bags</Link>
+          <nav className="text-xs text-neutral-400 mb-8 flex flex-wrap gap-2 items-center tracking-wider uppercase" aria-label="Breadcrumb">
+            <Link href="/" className="hover:text-black transition-colors">Головна</Link>
+            <span aria-hidden>›</span>
+            <Link href="/catalog" className="hover:text-black transition-colors">Каталог</Link>
             {categoryName && (
               <>
                 <span aria-hidden>›</span>
                 {categorySlug ? (
-                  <Link href={`/catalog/${categorySlug}`} className="hover:underline">
+                  <Link href={`/catalog/${categorySlug}`} className="hover:text-black transition-colors">
                     {categoryName}
                   </Link>
                 ) : (
@@ -134,13 +136,13 @@ export default async function ProductPage({ params }: Props) {
               </>
             )}
             <span aria-hidden>›</span>
-            <span className="text-gray-800 line-clamp-1">{product.name}</span>
+            <span className="text-neutral-700 line-clamp-1 normal-case">{product.name}</span>
           </nav>
 
-          <div className="grid sm:grid-cols-2 gap-8 lg:gap-12">
+          <div className="grid sm:grid-cols-2 gap-10 lg:gap-16">
             {/* Photo gallery */}
             <div>
-              <div className="aspect-square relative rounded-2xl overflow-hidden bg-gray-100 mb-3">
+              <div className="aspect-[3/4] relative overflow-hidden bg-neutral-100 mb-3">
                 {primaryPhoto ? (
                   <Image
                     src={primaryPhoto.url}
@@ -151,8 +153,13 @@ export default async function ProductPage({ params }: Props) {
                     priority
                   />
                 ) : (
-                  <div className="flex items-center justify-center h-full text-7xl text-gray-300 select-none">
+                  <div className="flex items-center justify-center h-full text-neutral-300 text-6xl select-none">
                     👜
+                  </div>
+                )}
+                {!inStock && (
+                  <div className="absolute inset-0 bg-white/50 flex items-end p-4">
+                    <span className="text-xs tracking-widest uppercase text-neutral-600">Немає в наявності</span>
                   </div>
                 )}
               </div>
@@ -161,7 +168,7 @@ export default async function ProductPage({ params }: Props) {
                   {photos.map((p, i) => (
                     <div
                       key={i}
-                      className="w-16 h-16 relative rounded-lg overflow-hidden border border-gray-200"
+                      className="w-16 h-20 relative overflow-hidden border border-neutral-200"
                     >
                       <Image
                         src={p.url}
@@ -177,29 +184,34 @@ export default async function ProductPage({ params }: Props) {
             </div>
 
             {/* Product info */}
-            <div className="space-y-4">
-              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 leading-snug">
-                {product.name}
-              </h1>
+            <div className="space-y-5">
+              <div>
+                <p className="text-[10px] tracking-[0.5em] uppercase text-neutral-400 mb-2">
+                  {categoryName ?? 'Julia Lebedeva Collection'}
+                </p>
+                <h1 className="text-2xl sm:text-3xl font-black uppercase tracking-tight text-neutral-900 leading-snug">
+                  {product.name}
+                </h1>
+              </div>
 
               {product.price_retail > 0 && (
-                <p className="text-3xl font-bold text-gray-900">{product.price_retail} грн</p>
+                <p className="text-2xl font-bold text-neutral-900">{product.price_retail} грн</p>
               )}
 
-              <p className={`text-sm font-semibold ${inStock ? 'text-green-600' : 'text-red-500'}`}>
+              <p className={`text-xs tracking-widest uppercase font-medium ${inStock ? 'text-green-700' : 'text-neutral-400'}`}>
                 {inStock ? '✓ В наявності' : 'Немає в наявності'}
               </p>
 
               {inStockVariants.length > 0 && (
                 <div>
-                  <p className="text-sm font-medium text-gray-700 mb-2">
-                    Кольори в наявності:
+                  <p className="text-xs tracking-widest uppercase text-neutral-500 mb-3">
+                    Кольори в наявності
                   </p>
                   <div className="flex flex-wrap gap-2">
                     {inStockVariants.map((v, i) => (
                       <span
                         key={i}
-                        className="px-3 py-1 rounded-full border border-gray-300 text-sm bg-gray-50"
+                        className="px-3 py-1 border border-neutral-300 text-xs text-neutral-700 tracking-wide"
                       >
                         {v.color}
                       </span>
@@ -209,39 +221,39 @@ export default async function ProductPage({ params }: Props) {
               )}
 
               {(product.material || product.size_text) && (
-                <dl className="space-y-1 text-sm">
+                <dl className="space-y-2 text-sm border-t border-neutral-100 pt-4">
                   {product.material && (
-                    <div className="flex gap-2">
-                      <dt className="text-gray-500 w-24 shrink-0">Матеріал</dt>
-                      <dd className="text-gray-900">{product.material}</dd>
+                    <div className="flex gap-3">
+                      <dt className="text-neutral-400 w-24 shrink-0 text-xs uppercase tracking-wider">Матеріал</dt>
+                      <dd className="text-neutral-800">{product.material}</dd>
                     </div>
                   )}
                   {product.size_text && (
-                    <div className="flex gap-2">
-                      <dt className="text-gray-500 w-24 shrink-0">Розмір</dt>
-                      <dd className="text-gray-900">{product.size_text}</dd>
+                    <div className="flex gap-3">
+                      <dt className="text-neutral-400 w-24 shrink-0 text-xs uppercase tracking-wider">Розмір</dt>
+                      <dd className="text-neutral-800">{product.size_text}</dd>
                     </div>
                   )}
                 </dl>
               )}
 
               {product.description && (
-                <div className="border-t pt-4">
-                  <p className="text-sm text-gray-600 whitespace-pre-line leading-relaxed">
+                <div className="border-t border-neutral-100 pt-4">
+                  <p className="text-sm text-neutral-600 whitespace-pre-line leading-relaxed">
                     {product.description}
                   </p>
                 </div>
               )}
 
               {/* CTA */}
-              <div className="border-t pt-4 space-y-3">
+              <div className="border-t border-neutral-200 pt-5 space-y-3">
                 <a
                   href={`tel:${BRAND.phone}`}
-                  className="flex items-center justify-center gap-2 w-full bg-gray-900 text-white font-semibold py-3.5 rounded-xl hover:bg-gray-700 transition-colors"
+                  className="flex items-center justify-center gap-3 w-full bg-neutral-950 text-white text-xs font-medium tracking-[0.2em] uppercase py-4 hover:bg-neutral-800 transition-colors"
                 >
-                  📞 Замовити: {BRAND.phoneDisplay}
+                  <span>📞</span> Замовити: {BRAND.phoneDisplay}
                 </a>
-                <p className="text-xs text-gray-400 text-center">
+                <p className="text-xs text-neutral-400 text-center tracking-wide">
                   Доставка {BRAND.delivery.join(', ')} · {BRAND.hours} ·{' '}
                   Відправка в день замовлення до {BRAND.orderCutoff}
                 </p>
@@ -249,7 +261,7 @@ export default async function ProductPage({ params }: Props) {
             </div>
           </div>
 
-          <div className="mt-10 border-t pt-4 text-sm text-gray-400">
+          <div className="mt-12 border-t border-neutral-100 pt-4 text-xs text-neutral-400 tracking-wider">
             Артикул: <span className="font-mono">{product.code}</span>
           </div>
         </div>
