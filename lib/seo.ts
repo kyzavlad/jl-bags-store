@@ -15,6 +15,17 @@ export const BRAND = {
   hours: 'замовлення онлайн 24/7',
 }
 
+/** Storefront navigation: the default catalog categories in display order. */
+export const NAV_CATEGORIES: { slug: string; name: string; icon: string }[] = [
+  { slug: 'phone-bags', name: 'Для телефону', icon: '📱' },
+  { slug: 'suede-bags', name: 'Замшеві', icon: '👜' },
+  { slug: 'leather-bags', name: 'Шкіряні', icon: '💼' },
+  { slug: 'crossbody-bags', name: 'Через плече', icon: '👛' },
+  { slug: 'shoppers', name: 'Шопери', icon: '🛍️' },
+  { slug: 'backpacks', name: 'Рюкзаки', icon: '🎒' },
+  { slug: 'accessories', name: 'Аксесуари', icon: '✨' },
+]
+
 /** Per-slug SEO copy for the 7 default category pages. */
 export const CATEGORY_META: Record<string, { title: string; h1: string; intro: string }> = {
   'phone-bags': {

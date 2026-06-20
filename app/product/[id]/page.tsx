@@ -4,6 +4,8 @@ import Image from 'next/image'
 import type { Metadata } from 'next'
 import { getServiceSupabase } from '@/lib/supabase/server'
 import { BRAND, SITE_URL } from '@/lib/seo'
+import { SiteHeader } from '@/components/storefront/site-header'
+import { SiteFooter } from '@/components/storefront/site-footer'
 import type { Product } from '@/lib/types'
 
 export const dynamic = 'force-dynamic'
@@ -113,6 +115,7 @@ export default async function ProductPage({ params }: Props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+      <SiteHeader />
       <main className="min-h-screen bg-white">
         <div className="max-w-5xl mx-auto px-4 py-8">
           {/* Breadcrumb */}
@@ -251,6 +254,7 @@ export default async function ProductPage({ params }: Props) {
           </div>
         </div>
       </main>
+      <SiteFooter />
     </>
   )
 }
