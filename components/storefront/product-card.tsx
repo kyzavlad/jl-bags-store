@@ -2,7 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import type { Product } from '@/lib/types'
 
-/** Product tile used on the homepage and category pages. */
+/** Product tile — boutique minimal style. */
 export function ProductCard({ product }: { product: Product }) {
   const photos = product.product_photos ?? []
   const photo = photos.find((p) => p.is_primary) ?? photos[0]
@@ -11,36 +11,37 @@ export function ProductCard({ product }: { product: Product }) {
   return (
     <Link
       href={`/product/${product.id}`}
-      className="group rounded-2xl border border-stone-200 bg-white overflow-hidden hover:border-stone-400 hover:shadow-md transition-all"
+      className="group block"
     >
-      <div className="aspect-square bg-stone-100 relative overflow-hidden">
+      {/* Image */}
+      <div className="aspect-[3/4] bg-neutral-100 relative overflow-hidden mb-3">
         {photo ? (
           <Image
             src={photo.url}
             alt={product.name}
             fill
-            className="object-cover group-hover:scale-105 transition-transform duration-500"
+            className="object-cover group-hover:scale-105 transition-transform duration-700"
             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
           />
         ) : (
-          <div className="flex items-center justify-center h-full text-stone-300 text-5xl select-none">
+          <div className="flex items-center justify-center h-full text-neutral-300 text-4xl select-none">
             👜
           </div>
         )}
         {!inStock && (
-          <span className="absolute top-2 left-2 bg-stone-800/80 text-white text-xs px-2 py-0.5 rounded-full">
-            Немає
-          </span>
+          <div className="absolute inset-0 bg-white/50 flex items-end p-3">
+            <span className="text-xs tracking-widest uppercase text-neutral-600">Немає в наявності</span>
+          </div>
         )}
       </div>
-      <div className="p-3">
-        <p className="text-sm font-medium text-stone-900 line-clamp-2 min-h-[2.5rem]">
-          {product.name}
-        </p>
+
+      {/* Info */}
+      <div>
+        <p className="text-sm text-neutral-800 line-clamp-1">{product.name}</p>
         {product.price_retail > 0 ? (
-          <p className="text-base font-bold text-stone-900 mt-1">{product.price_retail} грн</p>
+          <p className="text-sm font-semibold text-black mt-0.5">{product.price_retail} грн</p>
         ) : (
-          <p className="text-sm text-stone-400 mt-1">Ціна за запитом</p>
+          <p className="text-xs text-neutral-400 mt-0.5 tracking-wider uppercase">Ціна за запитом</p>
         )}
       </div>
     </Link>

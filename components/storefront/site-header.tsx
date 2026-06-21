@@ -1,54 +1,90 @@
 import Link from 'next/link'
-import { BRAND, NAV_CATEGORIES } from '@/lib/seo'
+import { Instagram, Facebook, Phone } from 'lucide-react'
+import { BRAND } from '@/lib/seo'
+
+const NAV = [
+  { label: 'Каталог',           href: '/catalog' },
+  { label: 'Доставка та оплата', href: '/#delivery' },
+  { label: 'Оптовикам',         href: '/pricelist' },
+  { label: 'Контакти',          href: '/#contacts' },
+]
 
 /**
- * Public storefront header. Server component (no client JS): brand wordmark,
- * a horizontally-scrollable category nav, and a click-to-call phone button.
+ * Julia Lebedeva Collection boutique header.
+ * White background, circular JL monogram, centered nav, social + phone on right.
  */
 export function SiteHeader() {
   return (
-    <header className="sticky top-0 z-30 bg-white/95 backdrop-blur border-b border-stone-200">
-      <div className="max-w-6xl mx-auto px-4">
-        <div className="flex items-center justify-between h-16 gap-4">
-          <Link href="/" className="flex items-baseline gap-1.5 shrink-0">
-            <span className="text-2xl font-bold tracking-tight text-stone-900">JL</span>
-            <span className="text-2xl font-light tracking-tight text-stone-500">Bags</span>
-          </Link>
+    <header className="sticky top-0 z-40 bg-white border-b border-neutral-200">
+      <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between gap-6">
 
-          <nav className="hidden lg:flex items-center gap-1">
-            {NAV_CATEGORIES.map((c) => (
-              <Link
-                key={c.slug}
-                href={`/catalog/${c.slug}`}
-                className="px-3 py-2 text-sm font-medium text-stone-600 hover:text-stone-900 transition-colors"
-              >
-                {c.name}
-              </Link>
-            ))}
-          </nav>
+        {/* Logo — circular monogram */}
+        <Link href="/" className="shrink-0 flex items-center gap-3">
+          <span className="flex items-center justify-center w-10 h-10 rounded-full border-2 border-black select-none">
+            <span className="text-[11px] font-black tracking-tighter leading-none text-black">JL</span>
+          </span>
+          <span className="hidden sm:block text-xs font-light tracking-[0.25em] uppercase text-neutral-600">
+            Julia Lebedeva
+          </span>
+        </Link>
 
-          <a
-            href={`tel:${BRAND.phone}`}
-            className="shrink-0 inline-flex items-center gap-2 rounded-full bg-stone-900 text-white text-sm font-semibold px-4 py-2 hover:bg-stone-700 transition-colors"
-          >
-            <span aria-hidden>📞</span>
-            <span className="hidden sm:inline">{BRAND.phoneDisplay}</span>
-            <span className="sm:hidden">Подзвонити</span>
-          </a>
-        </div>
-
-        {/* Mobile / tablet category strip */}
-        <nav className="lg:hidden flex items-center gap-1 overflow-x-auto scrollbar-hide pb-2 -mt-1">
-          {NAV_CATEGORIES.map((c) => (
+        {/* Center nav */}
+        <nav className="hidden md:flex items-center gap-8">
+          {NAV.map((item) => (
             <Link
-              key={c.slug}
-              href={`/catalog/${c.slug}`}
-              className="shrink-0 px-3 py-1.5 rounded-full bg-stone-100 text-xs font-medium text-stone-700 whitespace-nowrap hover:bg-stone-200 transition-colors"
+              key={item.href}
+              href={item.href}
+              className="text-xs font-medium tracking-widest uppercase text-neutral-700 hover:text-black transition-colors"
             >
-              {c.name}
+              {item.label}
             </Link>
           ))}
         </nav>
+
+        {/* Right: social icons + phone + language */}
+        <div className="flex items-center gap-4 shrink-0">
+          <a
+            href="https://www.instagram.com/"
+            aria-label="Instagram"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-neutral-500 hover:text-black transition-colors"
+          >
+            <Instagram className="w-4 h-4" />
+          </a>
+          <a
+            href="https://www.facebook.com/"
+            aria-label="Facebook"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-neutral-500 hover:text-black transition-colors"
+          >
+            <Facebook className="w-4 h-4" />
+          </a>
+          <a
+            href={`tel:${BRAND.phone}`}
+            aria-label={BRAND.phoneDisplay}
+            className="text-neutral-500 hover:text-black transition-colors"
+          >
+            <Phone className="w-4 h-4" />
+          </a>
+          <span className="text-xs font-semibold tracking-widest text-neutral-400 cursor-default select-none">RU</span>
+        </div>
+      </div>
+
+      {/* Mobile nav strip */}
+      <div className="md:hidden border-t border-neutral-100 overflow-x-auto scrollbar-hide">
+        <div className="flex px-4">
+          {NAV.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="shrink-0 px-4 py-2.5 text-xs font-medium tracking-widest uppercase text-neutral-600 hover:text-black whitespace-nowrap transition-colors"
+            >
+              {item.label}
+            </Link>
+          ))}
+        </div>
       </div>
     </header>
   )

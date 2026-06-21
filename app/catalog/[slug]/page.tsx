@@ -70,34 +70,38 @@ export default async function CategoryPage({ params }: Props) {
   return (
     <>
       <SiteHeader />
-      <main className="min-h-screen bg-stone-50">
-        <div className="max-w-6xl mx-auto px-4 py-8">
-          {/* Breadcrumb */}
-          <nav className="text-sm text-stone-500 mb-6" aria-label="Breadcrumb">
-            <Link href="/" className="hover:underline">Головна</Link>
-            <span className="mx-2" aria-hidden>›</span>
-            <span className="text-stone-800">{category.name}</span>
-          </nav>
+      <main className="min-h-screen bg-white">
+        {/* Page header */}
+        <div className="border-b border-neutral-200 bg-white">
+          <div className="max-w-7xl mx-auto px-6 py-10">
+            <nav className="text-xs text-neutral-400 mb-4 flex items-center gap-2 tracking-wider uppercase" aria-label="Breadcrumb">
+              <Link href="/" className="hover:text-black transition-colors">Головна</Link>
+              <span aria-hidden>›</span>
+              <Link href="/catalog" className="hover:text-black transition-colors">Каталог</Link>
+              <span aria-hidden>›</span>
+              <span className="text-neutral-700">{category.name}</span>
+            </nav>
+            <h1 className="text-3xl sm:text-4xl font-black uppercase tracking-tight text-neutral-900 mb-3">{h1}</h1>
+            {meta?.intro && (
+              <p className="text-neutral-500 text-sm max-w-2xl leading-relaxed">{meta.intro}</p>
+            )}
+          </div>
+        </div>
 
-          <h1 className="text-2xl sm:text-3xl font-bold text-stone-900 mb-2">{h1}</h1>
-          {meta?.intro && (
-            <p className="text-stone-500 text-sm mb-8 max-w-2xl leading-relaxed">{meta.intro}</p>
-          )}
-
+        <div className="max-w-7xl mx-auto px-6 py-12">
           {products.length === 0 ? (
-            <div className="py-20 text-center text-stone-400">
-              <p className="text-5xl mb-4">👜</p>
-              <p className="text-lg font-medium text-stone-600">Скоро тут з&apos;являться товари</p>
-              <p className="text-sm mt-1">Зв&apos;яжіться з нами для уточнення наявності</p>
+            <div className="py-24 text-center">
+              <p className="text-sm tracking-widest uppercase text-neutral-400 mb-6">Скоро тут з&apos;являться товари</p>
+              <p className="text-xs text-neutral-400 mb-8">Зв&apos;яжіться з нами для уточнення наявності</p>
               <a
                 href={`tel:${BRAND.phone}`}
-                className="inline-block mt-5 bg-stone-900 text-white px-6 py-2.5 rounded-full text-sm font-medium hover:bg-stone-700 transition-colors"
+                className="inline-flex items-center gap-3 border border-black text-black text-xs tracking-widest uppercase px-8 py-3.5 hover:bg-black hover:text-white transition-all"
               >
-                📞 {BRAND.phoneDisplay}
+                <span>📞</span> {BRAND.phoneDisplay}
               </a>
             </div>
           ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 sm:gap-8">
               {products.map((p) => (
                 <ProductCard key={p.id} product={p} />
               ))}
