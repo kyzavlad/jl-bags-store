@@ -3,7 +3,9 @@
 import { useState } from 'react'
 import { Plus, X } from 'lucide-react'
 
-const FAQ = [
+export type FaqItem = { q: string; a: string }
+
+const DEFAULT_FAQ: FaqItem[] = [
   {
     q: 'Як швидко відправляються замовлення?',
     a: 'Замовлення, оформлені до 13:30, ми відправляємо того ж робочого дня. Решта — наступного робочого дня. Зазвичай відправка займає 1–2 робочих дні.',
@@ -22,12 +24,12 @@ const FAQ = [
   },
 ]
 
-export function FaqAccordion() {
+export function FaqAccordion({ items = DEFAULT_FAQ }: { items?: FaqItem[] }) {
   const [open, setOpen] = useState<number | null>(null)
 
   return (
     <div className="max-w-3xl mx-auto divide-y divide-neutral-200 border-y border-neutral-200">
-      {FAQ.map((item, i) => {
+      {items.map((item, i) => {
         const isOpen = open === i
         return (
           <div key={i}>

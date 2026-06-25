@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { Instagram, Facebook, Send } from 'lucide-react'
 import { BRAND, SOCIAL } from '@/lib/seo'
 
@@ -24,9 +25,13 @@ export function SiteFooter() {
           {/* Brand column */}
           <div className="lg:col-span-1">
             <div className="flex items-center gap-3 mb-5">
-              <span className="flex items-center justify-center w-10 h-10 rounded-full border-2 border-black shrink-0">
-                <span className="text-[11px] font-black tracking-tighter text-black">JL</span>
-              </span>
+              <Image
+                src="/logo.png"
+                alt="Julia Lebedeva Collection"
+                width={44}
+                height={44}
+                className="w-11 h-11 object-contain shrink-0"
+              />
               <span className="text-neutral-900 text-sm font-semibold tracking-wide">
                 Julia Lebedeva
               </span>
