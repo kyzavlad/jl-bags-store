@@ -4,8 +4,9 @@ export const SITE_URL = (
 
 export const BRAND = {
   name: 'JL Bags',
-  phone: '+380964249565',
-  phoneDisplay: '+38 096 424 95 65',
+  collection: 'Julia Lebedeva Collection',
+  phone: '+380957427720',
+  phoneDisplay: '0957427720',
   city: 'Харків',
   region: 'Харківська область',
   country: 'Україна',
@@ -13,6 +14,23 @@ export const BRAND = {
   delivery: ['Нова пошта', 'Укрпошта'] as string[],
   orderCutoff: '13:30',
   hours: 'замовлення онлайн 24/7',
+}
+
+/** Social + contact channels (source of truth: client screenshots). */
+export const SOCIAL = {
+  instagram: 'https://www.instagram.com/sumki_kharkov/',
+  instagramHandle: '@sumki_kharkov',
+  facebook: 'https://www.facebook.com/',
+  facebookName: 'Julia Lebedeva',
+  telegram: 'https://t.me/',
+}
+
+/** Wholesale / dropshipping manager contact. */
+export const WHOLESALE = {
+  phone: '+380985218707',
+  phoneDisplay: '+380 98 521 87 07',
+  viber: 'viber://chat?number=%2B380985218707',
+  telegram: 'https://t.me/',
 }
 
 /** Storefront navigation: the default catalog categories in display order. */

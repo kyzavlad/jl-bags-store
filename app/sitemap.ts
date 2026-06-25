@@ -6,13 +6,21 @@ import { SITE_URL } from '@/lib/seo'
 export const revalidate = 86400
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const now = new Date()
+  const staticPaths = ['/catalog', '/delivery-payment', '/wholesale', '/contacts']
   const base: MetadataRoute.Sitemap = [
     {
       url: SITE_URL,
-      lastModified: new Date(),
+      lastModified: now,
       changeFrequency: 'weekly',
       priority: 1.0,
     },
+    ...staticPaths.map((p) => ({
+      url: `${SITE_URL}${p}`,
+      lastModified: now,
+      changeFrequency: 'weekly' as const,
+      priority: 0.7,
+    })),
   ]
 
   try {
