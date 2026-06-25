@@ -1,17 +1,17 @@
 import Link from 'next/link'
 import { Instagram, Facebook, Phone } from 'lucide-react'
-import { BRAND } from '@/lib/seo'
+import { BRAND, SOCIAL } from '@/lib/seo'
 
 const NAV = [
-  { label: 'Каталог',           href: '/catalog' },
-  { label: 'Доставка та оплата', href: '/#delivery' },
-  { label: 'Оптовикам',         href: '/pricelist' },
-  { label: 'Контакти',          href: '/#contacts' },
+  { label: 'Каталог',            href: '/catalog' },
+  { label: 'Доставка та оплата', href: '/delivery-payment' },
+  { label: 'Оптовикам',          href: '/wholesale' },
+  { label: 'Контакти',           href: '/contacts' },
 ]
 
 /**
  * Julia Lebedeva Collection boutique header.
- * White background, circular JL monogram, centered nav, social + phone on right.
+ * White sticky background, circular JL monogram, centered nav, social + phone on right.
  */
 export function SiteHeader() {
   return (
@@ -44,7 +44,7 @@ export function SiteHeader() {
         {/* Right: social icons + phone + language */}
         <div className="flex items-center gap-4 shrink-0">
           <a
-            href="https://www.instagram.com/"
+            href={SOCIAL.instagram}
             aria-label="Instagram"
             target="_blank"
             rel="noopener noreferrer"
@@ -53,7 +53,7 @@ export function SiteHeader() {
             <Instagram className="w-4 h-4" />
           </a>
           <a
-            href="https://www.facebook.com/"
+            href={SOCIAL.facebook}
             aria-label="Facebook"
             target="_blank"
             rel="noopener noreferrer"
