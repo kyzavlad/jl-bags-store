@@ -18,13 +18,10 @@ export function SiteHeader() {
     <header className="sticky top-0 z-40 bg-white border-b border-neutral-200">
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between gap-6">
 
-        {/* Logo — circular monogram */}
-        <Link href="/" className="shrink-0 flex items-center gap-3">
+        {/* Logo — circular monogram only, matches old approved screenshots */}
+        <Link href="/" className="shrink-0 flex items-center">
           <span className="flex items-center justify-center w-10 h-10 rounded-full border-2 border-black select-none">
             <span className="text-[11px] font-black tracking-tighter leading-none text-black">JL</span>
-          </span>
-          <span className="hidden sm:block text-xs font-light tracking-[0.25em] uppercase text-neutral-600">
-            Julia Lebedeva
           </span>
         </Link>
 

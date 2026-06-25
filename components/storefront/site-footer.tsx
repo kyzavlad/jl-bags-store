@@ -27,7 +27,7 @@ export function SiteFooter() {
               <span className="flex items-center justify-center w-10 h-10 rounded-full border-2 border-black shrink-0">
                 <span className="text-[11px] font-black tracking-tighter text-black">JL</span>
               </span>
-              <span className="text-neutral-900 text-xs tracking-[0.3em] uppercase font-light">
+              <span className="text-neutral-900 text-sm font-semibold tracking-wide">
                 Julia Lebedeva
               </span>
             </div>

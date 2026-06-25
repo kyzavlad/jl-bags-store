@@ -2,8 +2,8 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import {
   Backpack, ShoppingBag, Wallet, GraduationCap, Tag, Package,
-  Truck, ShieldCheck, Headphones, Sparkles, Factory, Check,
-  ArrowRight, Phone,
+  Truck, ShieldCheck, Headphones, Sparkles, Check,
+  ArrowRight, Phone, Camera, Handshake, Factory,
 } from 'lucide-react'
 import { getServiceSupabase } from '@/lib/supabase/server'
 import { BRAND, SITE_URL } from '@/lib/seo'
@@ -57,13 +57,13 @@ const WHY_US = [
   { Icon: Headphones,  title: 'Підтримка 24/7',  text: 'Завжди готові відповісти на ваші питання' },
 ]
 
-const ABOUT_FEATURES = [
-  'Власне виробництво',
-  'Контроль якості',
-  'Стабільна наявність',
-  'Контент для продажів',
-  'Швидкі відправки',
-  'Опт і дропшипінг',
+const ABOUT_FEATURES: { Icon: typeof Factory; label: string; text: string }[] = [
+  { Icon: Factory,     label: 'Власне виробництво', text: 'Ми самі виробляємо моделі JL Bags, тому контролюємо якість на кожному етапі.' },
+  { Icon: ShieldCheck, label: 'Контроль якості',    text: 'Працюємо лише з практичними та перевіреними матеріалами, які добре носяться.' },
+  { Icon: Package,     label: 'Стабільна наявність', text: 'Тримаємо складські залишки, щоб партнери не втрачали продажі через відсутність товару.' },
+  { Icon: Camera,      label: 'Контент для продажів', text: 'Надаємо фото та відео моделей для каталогу, сторіс, реклами та маркетплейсів.' },
+  { Icon: Truck,       label: 'Швидкі відправки',   text: 'Оперативно пакуємо та відправляємо замовлення по Україні щодня.' },
+  { Icon: Handshake,   label: 'Опт і дропшипінг',   text: 'Працюємо з бізнесами різного масштабу від малих сторінок до великих магазинів.' },
 ]
 
 const STATS = [
@@ -145,9 +145,9 @@ export default async function HomePage() {
         <HeroSlider />
 
         {/* ── POPULAR CATEGORIES ────────────────────────────────────────────── */}
-        <section className="bg-white py-20" id="catalog">
+        <section className="bg-neutral-50 py-20" id="catalog">
           <div className="max-w-7xl mx-auto px-6">
-            <h2 className="text-3xl sm:text-4xl font-black text-center text-neutral-900 mb-14">
+            <h2 className="text-4xl sm:text-5xl font-black text-center text-neutral-900 mb-14">
               Популярні категорії
             </h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 sm:gap-6">
@@ -157,7 +157,9 @@ export default async function HomePage() {
                   <Link
                     key={`${c.name}-${i}`}
                     href={href}
-                    className="group flex flex-col items-center justify-center gap-4 rounded-2xl border border-neutral-200 bg-white p-6 aspect-square hover:border-black transition-colors"
+                    className={`group flex flex-col items-center justify-center gap-4 rounded-2xl border bg-white p-6 aspect-square hover:border-black transition-colors ${
+                      i === 0 ? 'border-black' : 'border-neutral-200'
+                    }`}
                   >
                     <c.Icon className="w-9 h-9 text-neutral-900" strokeWidth={1.5} />
                     <span className="text-xs sm:text-sm font-semibold text-center text-neutral-800">
@@ -232,38 +234,37 @@ export default async function HomePage() {
             </div>
 
             {/* Image + feature cards */}
-            <div className="grid lg:grid-cols-[1fr_minmax(280px,360px)_1fr] gap-6 items-center mb-14">
+            <div className="grid lg:grid-cols-[1fr_minmax(280px,340px)_1fr] gap-6 items-start mb-14">
               {/* left features */}
               <div className="flex flex-col gap-4 order-2 lg:order-1">
                 {ABOUT_FEATURES.slice(0, 3).map((f) => (
-                  <div key={f} className="flex items-center gap-3 rounded-xl border border-neutral-200 bg-white px-5 py-4">
-                    <span className="w-8 h-8 shrink-0 rounded-full bg-black text-white flex items-center justify-center">
-                      <Check className="w-4 h-4" />
-                    </span>
-                    <span className="text-sm font-medium text-neutral-800">{f}</span>
+                  <div key={f.label} className="flex items-start gap-3 rounded-xl border border-neutral-200 bg-white px-5 py-4">
+                    <f.Icon className="w-5 h-5 shrink-0 mt-0.5 text-neutral-700" strokeWidth={1.5} />
+                    <div>
+                      <p className="text-sm font-bold text-neutral-900">{f.label}</p>
+                      <p className="text-xs text-neutral-500 mt-1 leading-relaxed">{f.text}</p>
+                    </div>
                   </div>
                 ))}
               </div>
 
-              {/* center image — CSS background so a missing placeholder degrades cleanly.
-                  Drop a real portrait photo at /public/about.jpg */}
+              {/* center image */}
               <div
                 role="img"
                 aria-label="Власне виробництво Julia Lebedeva Collection"
-                className="order-1 lg:order-2 relative aspect-[3/4] rounded-2xl overflow-hidden bg-neutral-200 bg-cover bg-center flex items-center justify-center"
+                className="order-1 lg:order-2 relative aspect-[3/4] rounded-2xl overflow-hidden bg-neutral-200 bg-cover bg-center"
                 style={{ backgroundImage: "url('/about.jpg')" }}
-              >
-                <Factory className="w-12 h-12 text-neutral-400" strokeWidth={1} />
-              </div>
+              />
 
               {/* right features */}
               <div className="flex flex-col gap-4 order-3">
                 {ABOUT_FEATURES.slice(3, 6).map((f) => (
-                  <div key={f} className="flex items-center gap-3 rounded-xl border border-neutral-200 bg-white px-5 py-4">
-                    <span className="w-8 h-8 shrink-0 rounded-full bg-black text-white flex items-center justify-center">
-                      <Check className="w-4 h-4" />
-                    </span>
-                    <span className="text-sm font-medium text-neutral-800">{f}</span>
+                  <div key={f.label} className="flex items-start gap-3 rounded-xl border border-neutral-200 bg-white px-5 py-4">
+                    <f.Icon className="w-5 h-5 shrink-0 mt-0.5 text-neutral-700" strokeWidth={1.5} />
+                    <div>
+                      <p className="text-sm font-bold text-neutral-900">{f.label}</p>
+                      <p className="text-xs text-neutral-500 mt-1 leading-relaxed">{f.text}</p>
+                    </div>
                   </div>
                 ))}
               </div>
