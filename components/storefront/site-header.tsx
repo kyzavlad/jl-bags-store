@@ -1,31 +1,34 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { Instagram, Facebook, Phone } from 'lucide-react'
-import { BRAND } from '@/lib/seo'
+import { BRAND, SOCIAL } from '@/lib/seo'
 
 const NAV = [
-  { label: 'Каталог',           href: '/catalog' },
-  { label: 'Доставка та оплата', href: '/#delivery' },
-  { label: 'Оптовикам',         href: '/pricelist' },
-  { label: 'Контакти',          href: '/#contacts' },
+  { label: 'Каталог',            href: '/catalog' },
+  { label: 'Доставка та оплата', href: '/delivery-payment' },
+  { label: 'Оптовикам',          href: '/wholesale' },
+  { label: 'Контакти',           href: '/contacts' },
 ]
 
 /**
  * Julia Lebedeva Collection boutique header.
- * White background, circular JL monogram, centered nav, social + phone on right.
+ * White sticky background, circular JL monogram, centered nav, social + phone on right.
  */
 export function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 bg-white border-b border-neutral-200">
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between gap-6">
 
-        {/* Logo — circular monogram */}
-        <Link href="/" className="shrink-0 flex items-center gap-3">
-          <span className="flex items-center justify-center w-10 h-10 rounded-full border-2 border-black select-none">
-            <span className="text-[11px] font-black tracking-tighter leading-none text-black">JL</span>
-          </span>
-          <span className="hidden sm:block text-xs font-light tracking-[0.25em] uppercase text-neutral-600">
-            Julia Lebedeva
-          </span>
+        {/* Logo — real circular JL monogram, matches old approved screenshots */}
+        <Link href="/" className="shrink-0 flex items-center" aria-label="Julia Lebedeva Collection — на головну">
+          <Image
+            src="/logo.png"
+            alt="Julia Lebedeva Collection"
+            width={44}
+            height={44}
+            priority
+            className="w-11 h-11 object-contain"
+          />
         </Link>
 
         {/* Center nav */}
@@ -44,7 +47,7 @@ export function SiteHeader() {
         {/* Right: social icons + phone + language */}
         <div className="flex items-center gap-4 shrink-0">
           <a
-            href="https://www.instagram.com/"
+            href={SOCIAL.instagram}
             aria-label="Instagram"
             target="_blank"
             rel="noopener noreferrer"
@@ -53,7 +56,7 @@ export function SiteHeader() {
             <Instagram className="w-4 h-4" />
           </a>
           <a
-            href="https://www.facebook.com/"
+            href={SOCIAL.facebook}
             aria-label="Facebook"
             target="_blank"
             rel="noopener noreferrer"

@@ -1,101 +1,116 @@
 import Link from 'next/link'
-import { Instagram, Facebook } from 'lucide-react'
-import { BRAND } from '@/lib/seo'
+import Image from 'next/image'
+import { Instagram, Facebook, Send } from 'lucide-react'
+import { BRAND, SOCIAL } from '@/lib/seo'
 
-const CATALOG_LINKS = [
-  { slug: 'phone-bags',    name: 'Сумочки для телефону' },
-  { slug: 'suede-bags',   name: 'Замшеві сумки' },
-  { slug: 'leather-bags', name: 'Шкіряні сумки' },
-  { slug: 'crossbody-bags', name: 'Сумки через плече' },
-  { slug: 'shoppers',     name: 'Шопери' },
-  { slug: 'backpacks',    name: 'Рюкзаки' },
-  { slug: 'accessories',  name: 'Аксесуари' },
+const INFO_LINKS = [
+  { label: 'Каталог',            href: '/catalog' },
+  { label: 'Доставка та оплата', href: '/delivery-payment' },
+  { label: 'Оптовикам',          href: '/wholesale' },
 ]
 
-/** Julia Lebedeva Collection footer — dark, premium fashion style. */
+const LEGAL_LINKS = [
+  { label: 'Політика конфіденційності', href: '/privacy' },
+  { label: 'Умови використання',        href: '/terms' },
+  { label: 'Контакти',                  href: '/contacts' },
+]
+
+/** Julia Lebedeva Collection footer — white, minimal, premium. */
 export function SiteFooter() {
   return (
-    <footer className="bg-neutral-950 text-neutral-400">
+    <footer className="bg-white border-t border-neutral-200 text-neutral-600">
       <div className="max-w-7xl mx-auto px-6 pt-16 pb-10">
         <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
 
           {/* Brand column */}
           <div className="lg:col-span-1">
             <div className="flex items-center gap-3 mb-5">
-              <span className="flex items-center justify-center w-9 h-9 rounded-full border border-white/40 shrink-0">
-                <span className="text-[10px] font-black tracking-tighter text-white">JL</span>
-              </span>
-              <span className="text-white text-xs tracking-[0.3em] uppercase font-light">
+              <Image
+                src="/logo.png"
+                alt="Julia Lebedeva Collection"
+                width={44}
+                height={44}
+                className="w-11 h-11 object-contain shrink-0"
+              />
+              <span className="text-neutral-900 text-sm font-semibold tracking-wide">
                 Julia Lebedeva
               </span>
             </div>
             <p className="text-sm leading-relaxed text-neutral-500">
-              Преміальні жіночі сумки з {BRAND.city}.
-              Замшеві, шкіряні моделі та сумочки для телефону.
-              Доставка по всій Україні.
+              Преміальні жіночі сумки та аксесуари. Натуральні матеріали, бездоганна якість.
             </p>
             <div className="flex items-center gap-4 mt-6">
-              <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer"
-                aria-label="Instagram" className="hover:text-white transition-colors">
-                <Instagram className="w-4 h-4" />
+              <a href={SOCIAL.instagram} target="_blank" rel="noopener noreferrer"
+                aria-label="Instagram" className="text-neutral-500 hover:text-black transition-colors">
+                <Instagram className="w-5 h-5" />
               </a>
-              <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer"
-                aria-label="Facebook" className="hover:text-white transition-colors">
-                <Facebook className="w-4 h-4" />
+              <a href={SOCIAL.facebook} target="_blank" rel="noopener noreferrer"
+                aria-label="Facebook" className="text-neutral-500 hover:text-black transition-colors">
+                <Facebook className="w-5 h-5" />
+              </a>
+              <a href={SOCIAL.telegram} target="_blank" rel="noopener noreferrer"
+                aria-label="Telegram" className="text-neutral-500 hover:text-black transition-colors">
+                <Send className="w-5 h-5" />
               </a>
             </div>
           </div>
 
-          {/* Catalog */}
+          {/* Information */}
           <div>
-            <p className="text-xs tracking-widest uppercase text-white mb-5">Каталог</p>
+            <p className="text-xs tracking-widest uppercase text-neutral-900 mb-5">Інформація</p>
             <ul className="space-y-3 text-sm">
-              {CATALOG_LINKS.map((c) => (
-                <li key={c.slug}>
-                  <Link href={`/catalog/${c.slug}`}
-                    className="hover:text-white transition-colors">
-                    {c.name}
-                  </Link>
+              {INFO_LINKS.map((l) => (
+                <li key={l.href}>
+                  <Link href={l.href} className="hover:text-black transition-colors">{l.label}</Link>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Delivery */}
-          <div id="delivery">
-            <p className="text-xs tracking-widest uppercase text-white mb-5">Доставка</p>
-            <ul className="space-y-3 text-sm text-neutral-500">
-              <li>Нова пошта — по всій Україні</li>
-              <li>Укрпошта — по всій Україні</li>
-              <li>Відправка в день замовлення до&nbsp;{BRAND.orderCutoff}</li>
-              <li>Оплата при отриманні</li>
+          {/* Legal */}
+          <div>
+            <p className="text-xs tracking-widest uppercase text-neutral-900 mb-5">Юридична інформація</p>
+            <ul className="space-y-3 text-sm">
+              {LEGAL_LINKS.map((l) => (
+                <li key={l.href}>
+                  <Link href={l.href} className="hover:text-black transition-colors">{l.label}</Link>
+                </li>
+              ))}
             </ul>
           </div>
 
           {/* Contacts */}
-          <div id="contacts">
-            <p className="text-xs tracking-widest uppercase text-white mb-5">Контакти</p>
+          <div>
+            <p className="text-xs tracking-widest uppercase text-neutral-900 mb-5">Контакти</p>
             <ul className="space-y-3 text-sm">
               <li>
-                <a href={`tel:${BRAND.phone}`}
-                  className="hover:text-white transition-colors">
+                <a href={`tel:${BRAND.phone}`} className="hover:text-black transition-colors text-base font-medium text-neutral-900">
                   {BRAND.phoneDisplay}
                 </a>
               </li>
               <li className="text-neutral-500">{BRAND.city}, {BRAND.region}</li>
               <li className="text-neutral-500">Замовлення онлайн 24/7</li>
-              <li>
-                <Link href="/pricelist" className="hover:text-white transition-colors text-xs tracking-wider uppercase">
-                  Прайс-лист для оптовиків →
-                </Link>
-              </li>
             </ul>
+            <div className="flex items-center gap-4 mt-5">
+              <a href={SOCIAL.instagram} target="_blank" rel="noopener noreferrer"
+                aria-label="Instagram" className="text-neutral-500 hover:text-black transition-colors">
+                <Instagram className="w-5 h-5" />
+              </a>
+              <a href={SOCIAL.facebook} target="_blank" rel="noopener noreferrer"
+                aria-label="Facebook" className="text-neutral-500 hover:text-black transition-colors">
+                <Facebook className="w-5 h-5" />
+              </a>
+              <a href={SOCIAL.telegram} target="_blank" rel="noopener noreferrer"
+                aria-label="Telegram" className="text-neutral-500 hover:text-black transition-colors">
+                <Send className="w-5 h-5" />
+              </a>
+            </div>
           </div>
         </div>
 
-        <div className="border-t border-neutral-800 mt-12 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-neutral-600">
-          <span>© {new Date().getFullYear()} Julia Lebedeva Collection. Усі права захищені.</span>
-          <Link href="/admin" className="hover:text-neutral-400 transition-colors">
+        <div className="border-t border-neutral-200 mt-12 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-neutral-400">
+          <span>© {new Date().getFullYear()} Julia Lebedeva. Всі права захищено</span>
+          <Link href="/admin" className="hover:text-neutral-700 transition-colors">
             Адміністрування
           </Link>
         </div>
