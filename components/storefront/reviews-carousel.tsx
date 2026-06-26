@@ -11,7 +11,7 @@ import { ChevronLeft, ChevronRight, Star } from 'lucide-react'
  * Cards gracefully show a neutral placeholder until the images exist.
  */
 
-const REVIEWS = [1, 2, 3, 4, 5, 6].map((n) => ({
+const REVIEWS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((n) => ({
   id: n,
   img: `/reviews/review-${n}.jpg`,
 }))
