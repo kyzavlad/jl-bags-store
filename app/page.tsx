@@ -1,12 +1,13 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import {
-  Backpack, ShoppingBag, Wallet, GraduationCap, Tag, Package,
-  Truck, ShieldCheck, Headphones, Sparkles, Check,
+  Package, Truck, ShieldCheck, Headphones, Sparkles,
   ArrowRight, Phone, Camera, Handshake, Factory,
+  MapPin, Clock,
 } from 'lucide-react'
 import { getServiceSupabase } from '@/lib/supabase/server'
 import { BRAND, SITE_URL } from '@/lib/seo'
+import { fetchActiveCategories, FALLBACK_CATEGORIES, iconForCategory } from '@/lib/categories'
 import { SiteHeader } from '@/components/storefront/site-header'
 import { SiteFooter } from '@/components/storefront/site-footer'
 import { ProductCard } from '@/components/storefront/product-card'
@@ -18,37 +19,18 @@ import type { Product } from '@/lib/types'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Julia Lebedeva Collection — жіночі сумки з доставкою по Україні',
+  title: 'JL Bags — жіночі сумки з доставкою по Україні',
   description:
-    'Julia Lebedeva Collection — преміальні жіночі сумки та рюкзаки власного виробництва. Замшеві та шкіряні сумки, сумочки для телефону, шопери, рюкзаки. Доставка Новою Поштою та Укрпоштою по всій Україні.',
+    'JL Bags — жіночі сумки з Харкова: сумочки для телефону, замшеві та еко-шкіряні моделі, шопери, рюкзаки. Доставка Новою Поштою та Укрпоштою по всій Україні.',
   alternates: { canonical: SITE_URL },
   openGraph: {
-    title: 'Julia Lebedeva Collection — жіночі сумки',
+    title: 'JL Bags — жіночі сумки',
     description:
-      'Преміальні жіночі сумки та рюкзаки власного виробництва. Доставка по всій Україні.',
+      'Жіночі сумки з Харкова: сумочки для телефону, замшеві та еко-шкіряні моделі, шопери, рюкзаки. Доставка по всій Україні.',
     url: SITE_URL,
     type: 'website',
   },
 }
-
-/* ── Popular categories (designed grid, screenshots as source of truth) ─────────
-   Each card carries a best-effort `slug`. At render we only link to
-   /catalog/<slug> when that category slug is actually active in the DB —
-   otherwise the card falls back to the catalog index (never a 404). */
-const POPULAR_CATEGORIES: { name: string; slug: string; Icon: typeof Backpack }[] = [
-  { name: 'Рюкзак екошкіра',    slug: 'backpacks',      Icon: Backpack },
-  { name: 'Рюкзак текстиль',    slug: 'backpacks',      Icon: Backpack },
-  { name: 'Шкільний рюкзак',    slug: 'backpacks',      Icon: GraduationCap },
-  { name: 'Клатч кросбоді',     slug: 'crossbody-bags', Icon: ShoppingBag },
-  { name: 'Сумка екошкіра',     slug: 'leather-bags',   Icon: ShoppingBag },
-  { name: 'Сумка стьобана',     slug: 'suede-bags',     Icon: ShoppingBag },
-  { name: 'Бананка',            slug: 'crossbody-bags', Icon: Package },
-  { name: 'Сумка текстиль',     slug: 'shoppers',       Icon: ShoppingBag },
-  { name: 'Розпродаж',          slug: 'sale',           Icon: Tag },
-  { name: 'Чоловіча сумка',     slug: 'mens-bags',      Icon: ShoppingBag },
-  { name: 'Гаманець жіночий',   slug: 'accessories',    Icon: Wallet },
-  { name: 'Гаманець чоловічий', slug: 'accessories',    Icon: Wallet },
-]
 
 const WHY_US = [
   { Icon: Sparkles,    title: 'Преміум якість',  text: 'Натуральні матеріали та бездоганне виконання' },
@@ -76,11 +58,13 @@ const STATS = [
 const localBusinessJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Store',
-  name: 'Julia Lebedeva Collection',
+  name: BRAND.name,
+  alternateName: BRAND.collection,
+  image: `${SITE_URL}/logo.png`,
   url: SITE_URL,
   telephone: BRAND.phone,
   priceRange: '₴₴',
-  description: 'Преміальні жіночі сумки та рюкзаки власного виробництва. Доставка по всій Україні.',
+  description: 'Жіночі сумки з Харкова: сумочки для телефону, замшеві та еко-шкіряні моделі, шопери, рюкзаки. Доставка по всій Україні.',
   areaServed: { '@type': 'Country', name: 'Ukraine' },
   address: {
     '@type': 'PostalAddress',
@@ -116,21 +100,13 @@ async function fetchFeatured(): Promise<Product[]> {
   }
 }
 
-async function fetchActiveSlugs(): Promise<Set<string>> {
-  try {
-    const supabase = getServiceSupabase()
-    const { data } = await supabase
-      .from('categories')
-      .select('slug')
-      .eq('is_active', true)
-    return new Set((data ?? []).map((c: { slug: string }) => c.slug))
-  } catch {
-    return new Set()
-  }
-}
-
 export default async function HomePage() {
-  const [featured, activeSlugs] = await Promise.all([fetchFeatured(), fetchActiveSlugs()])
+  const [featured, dbCategories] = await Promise.all([fetchFeatured(), fetchActiveCategories()])
+
+  const usingDbCats = dbCategories.length > 0
+  const popularCategories = (
+    usingDbCats ? dbCategories.map((c) => ({ name: c.name, slug: c.slug })) : FALLBACK_CATEGORIES
+  ).slice(0, 12)
 
   return (
     <>
@@ -151,17 +127,18 @@ export default async function HomePage() {
               Популярні категорії
             </h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 sm:gap-6">
-              {POPULAR_CATEGORIES.map((c, i) => {
-                const href = activeSlugs.has(c.slug) ? `/catalog/${c.slug}` : '/catalog'
+              {popularCategories.map((c, i) => {
+                const Icon = iconForCategory(c.name)
+                const href = usingDbCats ? `/catalog/${c.slug}` : '/catalog'
                 return (
                   <Link
-                    key={`${c.name}-${i}`}
+                    key={`${c.slug}-${i}`}
                     href={href}
                     className={`group flex flex-col items-center justify-center gap-4 rounded-2xl border bg-white p-6 aspect-square hover:border-black transition-colors ${
                       i === 0 ? 'border-black' : 'border-neutral-200'
                     }`}
                   >
-                    <c.Icon className="w-9 h-9 text-neutral-900" strokeWidth={1.5} />
+                    <Icon className="w-9 h-9 text-neutral-900" strokeWidth={1.5} />
                     <span className="text-xs sm:text-sm font-semibold text-center text-neutral-800">
                       {c.name}
                     </span>
@@ -340,6 +317,44 @@ export default async function HomePage() {
                   <Phone className="w-4 h-4" /> {BRAND.phoneDisplay}
                 </a>
               </p>
+            </div>
+          </div>
+        </section>
+
+        {/* ── LOCAL INFO / TRUST (Google Business Profile support) ───────────── */}
+        <section className="bg-neutral-50 border-t border-neutral-200 py-12" aria-label="Інформація про магазин">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-center sm:text-left">
+              <div className="flex items-start gap-3 justify-center sm:justify-start">
+                <MapPin className="w-5 h-5 text-neutral-900 shrink-0 mt-0.5" strokeWidth={1.5} />
+                <div>
+                  <p className="text-sm font-bold text-neutral-900">JL Bags</p>
+                  <p className="text-sm text-neutral-500 mt-0.5">{BRAND.city} · {BRAND.serviceArea}</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3 justify-center sm:justify-start">
+                <Truck className="w-5 h-5 text-neutral-900 shrink-0 mt-0.5" strokeWidth={1.5} />
+                <div>
+                  <p className="text-sm font-bold text-neutral-900">Доставка</p>
+                  <p className="text-sm text-neutral-500 mt-0.5">{BRAND.delivery.join(' · ')}</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3 justify-center sm:justify-start">
+                <Clock className="w-5 h-5 text-neutral-900 shrink-0 mt-0.5" strokeWidth={1.5} />
+                <div>
+                  <p className="text-sm font-bold text-neutral-900">Графік</p>
+                  <p className="text-sm text-neutral-500 mt-0.5">Замовлення онлайн 24/7</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3 justify-center sm:justify-start">
+                <Phone className="w-5 h-5 text-neutral-900 shrink-0 mt-0.5" strokeWidth={1.5} />
+                <div>
+                  <p className="text-sm font-bold text-neutral-900">Телефон</p>
+                  <a href={`tel:${BRAND.phone}`} className="text-sm text-neutral-500 mt-0.5 hover:text-black transition-colors">
+                    {BRAND.phoneDisplay}
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
         </section>

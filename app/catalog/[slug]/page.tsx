@@ -1,3 +1,4 @@
+import { cache } from 'react'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import type { Metadata } from 'next'
@@ -12,7 +13,8 @@ export const dynamic = 'force-dynamic'
 
 type Props = { params: { slug: string } }
 
-async function fetchCategory(slug: string): Promise<Category | null> {
+// Cached per-request so generateMetadata and the page share one DB query.
+const fetchCategory = cache(async (slug: string): Promise<Category | null> => {
   const supabase = getServiceSupabase()
   const { data } = await supabase
     .from('categories')
@@ -21,7 +23,7 @@ async function fetchCategory(slug: string): Promise<Category | null> {
     .eq('is_active', true)
     .maybeSingle()
   return data ?? null
-}
+})
 
 async function fetchProducts(categoryId: string): Promise<Product[]> {
   const supabase = getServiceSupabase()
@@ -37,9 +39,27 @@ async function fetchProducts(categoryId: string): Promise<Product[]> {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const meta = CATEGORY_META[params.slug]
-  const title = meta?.title ?? 'Каталог — JL Bags'
-  const description = meta?.intro ?? 'Жіночі сумки JL Bags. Доставка по Україні.'
+
+  // Prefer the real DB category name for a natural, accurate title.
+  let dbName: string | null = null
+  try {
+    const category = await fetchCategory(params.slug)
+    dbName = category?.name ?? null
+  } catch {
+    /* DB unavailable — fall back to static copy below */
+  }
+
+  const name = dbName ?? meta?.h1
+  const title = name
+    ? `${name} — купити в JL Bags з доставкою по Україні`
+    : (meta?.title ?? 'Каталог — JL Bags')
+  const description =
+    meta?.intro ??
+    (name
+      ? `${name} від JL Bags. Доставка Новою Поштою та Укрпоштою по всій Україні.`
+      : 'Жіночі сумки JL Bags. Доставка по Україні.')
   const canonical = `${SITE_URL}/catalog/${params.slug}`
+
   return {
     title,
     description,
@@ -66,6 +86,9 @@ export default async function CategoryPage({ params }: Props) {
 
   const meta = CATEGORY_META[params.slug]
   const h1 = meta?.h1 ?? category.name
+  const intro =
+    meta?.intro ??
+    `${category.name} від JL Bags. Доставка Новою Поштою та Укрпоштою по всій Україні.`
 
   return (
     <>
@@ -82,9 +105,7 @@ export default async function CategoryPage({ params }: Props) {
               <span className="text-neutral-700">{category.name}</span>
             </nav>
             <h1 className="text-3xl sm:text-4xl font-black uppercase tracking-tight text-neutral-900 mb-3">{h1}</h1>
-            {meta?.intro && (
-              <p className="text-neutral-500 text-sm max-w-2xl leading-relaxed">{meta.intro}</p>
-            )}
+            <p className="text-neutral-500 text-sm max-w-2xl leading-relaxed">{intro}</p>
           </div>
         </div>
 
