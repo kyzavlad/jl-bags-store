@@ -20,9 +20,15 @@ export const BRAND = {
 export const SOCIAL = {
   instagram: 'https://www.instagram.com/sumki_kharkov/',
   instagramHandle: '@sumki_kharkov',
-  facebook: 'https://www.facebook.com/',
+  facebook: 'https://www.facebook.com/sumki.kharkov.julia/',
   facebookName: 'Julia Lebedeva',
-  telegram: 'https://t.me/',
+  // Telegram has no confirmed public @username yet, so we deep-link by phone.
+  // `https://t.me/+<international number>` reliably opens the contact in the
+  // Telegram app / web on most platforms. If the client provides a stable
+  // public username (e.g. https://t.me/sumki_kharkov), swap it in here — a
+  // username link is more robust than a phone-based one across all browsers.
+  telegram: 'https://t.me/+380957427720',
+  telegramLabel: 'Написати в Telegram',
 }
 
 /** Wholesale / dropshipping manager contact. */
@@ -30,7 +36,33 @@ export const WHOLESALE = {
   phone: '+380985218707',
   phoneDisplay: '+380 98 521 87 07',
   viber: 'viber://chat?number=%2B380985218707',
-  telegram: 'https://t.me/',
+  // Phone-based Telegram deep link (matches the Viber number above). Replace
+  // with a public @username link if the client provides one.
+  telegram: 'https://t.me/+380985218707',
+}
+
+/** Default Open Graph / Twitter share image (brand logo, square). */
+export const OG_IMAGE = '/logo.png'
+
+/** Canonical social profiles for schema.org `sameAs`. */
+export const SAME_AS: string[] = [SOCIAL.facebook, SOCIAL.instagram]
+
+/**
+ * Build commercial SEO copy for a database-driven category from its real name.
+ * Used when a category has no hand-written CATEGORY_META entry. Natural tone,
+ * mentions delivery across Ukraine — no keyword stuffing.
+ */
+export function categorySeo(name: string): { title: string; description: string; intro: string } {
+  const clean = (name || '').trim() || 'Жіночі сумки'
+  return {
+    title: `${clean} — купити в JL Bags з доставкою по Україні`,
+    description:
+      `${clean} від українського виробника JL Bags: натуральні матеріали, великий вибір ` +
+      `кольорів та моделей. Доставка Новою Поштою та Укрпоштою по всій Україні, оплата при отриманні.`,
+    intro:
+      `${clean} від JL Bags — жіночі сумки та аксесуари від виробника з Харкова. Якісні матеріали, ` +
+      `актуальні моделі та швидка доставка по всій Україні.`,
+  }
 }
 
 /** Storefront navigation: the default catalog categories in display order. */

@@ -3,10 +3,11 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { getServiceSupabase } from '@/lib/supabase/server'
-import { BRAND, CATEGORY_META, SITE_URL } from '@/lib/seo'
+import { BRAND, CATEGORY_META, SITE_URL, OG_IMAGE, categorySeo } from '@/lib/seo'
 import { SiteHeader } from '@/components/storefront/site-header'
 import { SiteFooter } from '@/components/storefront/site-footer'
 import { ProductCard } from '@/components/storefront/product-card'
+import { PageViewTracker } from '@/components/analytics/PageViewTracker'
 import type { Category, Product } from '@/lib/types'
 
 export const dynamic = 'force-dynamic'
@@ -50,21 +51,25 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   const name = dbName ?? meta?.h1
-  const title = name
-    ? `${name} — купити в JL Bags з доставкою по Україні`
-    : (meta?.title ?? 'Каталог — JL Bags')
+  // Hand-written CATEGORY_META wins; otherwise generate commercial copy from the name.
+  const generated = name ? categorySeo(name) : null
+  const title = meta?.title ?? generated?.title ?? 'Каталог жіночих сумок — JL Bags'
   const description =
-    meta?.intro ??
-    (name
-      ? `${name} від JL Bags. Доставка Новою Поштою та Укрпоштою по всій Україні.`
-      : 'Жіночі сумки JL Bags. Доставка по Україні.')
+    meta?.intro ?? generated?.description ?? 'Жіночі сумки JL Bags. Доставка по Україні.'
   const canonical = `${SITE_URL}/catalog/${params.slug}`
 
   return {
-    title,
+    title: { absolute: title },
     description,
     alternates: { canonical },
-    openGraph: { title, description, url: canonical, type: 'website', siteName: 'JL Bags' },
+    openGraph: {
+      title,
+      description,
+      url: canonical,
+      type: 'website',
+      siteName: 'JL Bags',
+      images: [{ url: OG_IMAGE, alt: name ?? 'JL Bags' }],
+    },
   }
 }
 
@@ -86,14 +91,27 @@ export default async function CategoryPage({ params }: Props) {
 
   const meta = CATEGORY_META[params.slug]
   const h1 = meta?.h1 ?? category.name
-  const intro =
-    meta?.intro ??
-    `${category.name} від JL Bags. Доставка Новою Поштою та Укрпоштою по всій Україні.`
+  const intro = meta?.intro ?? categorySeo(category.name).intro
+
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Головна', item: SITE_URL },
+      { '@type': 'ListItem', position: 2, name: 'Каталог', item: `${SITE_URL}/catalog` },
+      { '@type': 'ListItem', position: 3, name: category.name, item: `${SITE_URL}/catalog/${params.slug}` },
+    ],
+  }
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <SiteHeader />
       <main className="min-h-screen bg-white">
+        <PageViewTracker event="category_view" params={{ category: category.name, slug: params.slug }} />
         {/* Page header */}
         <div className="border-b border-neutral-200 bg-white">
           <div className="max-w-7xl mx-auto px-6 py-10">

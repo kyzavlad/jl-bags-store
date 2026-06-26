@@ -7,9 +7,9 @@ import { SiteFooter } from '@/components/storefront/site-footer'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Доставка та оплата — Julia Lebedeva Collection',
+  title: { absolute: 'Доставка та оплата — JL Bags | Нова Пошта, Укрпошта' },
   description:
-    'Доставка Новою Поштою та Укрпоштою по всій Україні. Накладений платіж або оплата на картку. Відправка протягом 1–2 робочих днів.',
+    'Доставка замовлень JL Bags Новою Поштою та Укрпоштою по всій Україні. Накладений платіж або оплата на картку. Відправка протягом 1–2 робочих днів.',
   alternates: { canonical: `${SITE_URL}/delivery-payment` },
 }
 

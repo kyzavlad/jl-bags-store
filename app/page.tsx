@@ -6,7 +6,7 @@ import {
   MapPin, Clock,
 } from 'lucide-react'
 import { getServiceSupabase } from '@/lib/supabase/server'
-import { BRAND, SITE_URL } from '@/lib/seo'
+import { BRAND, SITE_URL, SAME_AS, OG_IMAGE } from '@/lib/seo'
 import { fetchActiveCategories, FALLBACK_CATEGORIES, iconForCategory } from '@/lib/categories'
 import { SiteHeader } from '@/components/storefront/site-header'
 import { SiteFooter } from '@/components/storefront/site-footer'
@@ -19,16 +19,18 @@ import type { Product } from '@/lib/types'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'JL Bags — жіночі сумки з доставкою по Україні',
+  // `absolute` so the root template doesn't append a second "| JL Bags".
+  title: { absolute: 'JL Bags — жіночі сумки від виробника з доставкою по Україні' },
   description:
-    'JL Bags — жіночі сумки з Харкова: сумочки для телефону, замшеві та еко-шкіряні моделі, шопери, рюкзаки. Доставка Новою Поштою та Укрпоштою по всій Україні.',
+    'JL Bags — жіночі сумки від українського виробника з Харкова: сумочки для телефону, замшеві та еко-шкіряні сумки, шопери, рюкзаки, аксесуари. Доставка Новою Поштою та Укрпоштою по всій Україні.',
   alternates: { canonical: SITE_URL },
   openGraph: {
-    title: 'JL Bags — жіночі сумки',
+    title: 'JL Bags — жіночі сумки від виробника',
     description:
-      'Жіночі сумки з Харкова: сумочки для телефону, замшеві та еко-шкіряні моделі, шопери, рюкзаки. Доставка по всій Україні.',
+      'Жіночі сумки від виробника з Харкова: сумочки для телефону, замшеві та еко-шкіряні моделі, шопери, рюкзаки. Доставка по всій Україні.',
     url: SITE_URL,
     type: 'website',
+    images: [{ url: OG_IMAGE, width: 1339, height: 1339, alt: 'JL Bags — жіночі сумки' }],
   },
 }
 
@@ -55,29 +57,52 @@ const STATS = [
   { value: '100%',   label: 'Контроль якості' },
 ]
 
-const localBusinessJsonLd = {
+const homeJsonLd = {
   '@context': 'https://schema.org',
-  '@type': 'Store',
-  name: BRAND.name,
-  alternateName: BRAND.collection,
-  image: `${SITE_URL}/logo.png`,
-  url: SITE_URL,
-  telephone: BRAND.phone,
-  priceRange: '₴₴',
-  description: 'Жіночі сумки з Харкова: сумочки для телефону, замшеві та еко-шкіряні моделі, шопери, рюкзаки. Доставка по всій Україні.',
-  areaServed: { '@type': 'Country', name: 'Ukraine' },
-  address: {
-    '@type': 'PostalAddress',
-    addressLocality: BRAND.city,
-    addressRegion: BRAND.region,
-    addressCountry: 'UA',
-  },
-  openingHoursSpecification: [
+  '@graph': [
     {
-      '@type': 'OpeningHoursSpecification',
-      dayOfWeek: ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'],
-      opens: '00:00',
-      closes: '23:59',
+      '@type': 'Store',
+      '@id': `${SITE_URL}/#store`,
+      name: BRAND.name,
+      alternateName: BRAND.collection,
+      image: `${SITE_URL}/logo.png`,
+      logo: `${SITE_URL}/logo.png`,
+      url: SITE_URL,
+      telephone: BRAND.phone,
+      priceRange: '₴₴',
+      description:
+        'Жіночі сумки від українського виробника з Харкова: сумочки для телефону, замшеві та еко-шкіряні моделі, шопери, рюкзаки, аксесуари. Доставка по всій Україні.',
+      areaServed: { '@type': 'Country', name: 'Ukraine' },
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: BRAND.city,
+        addressRegion: BRAND.region,
+        addressCountry: 'UA',
+      },
+      contactPoint: {
+        '@type': 'ContactPoint',
+        telephone: BRAND.phone,
+        contactType: 'customer service',
+        areaServed: 'UA',
+        availableLanguage: ['uk', 'ru'],
+      },
+      sameAs: SAME_AS,
+      openingHoursSpecification: [
+        {
+          '@type': 'OpeningHoursSpecification',
+          dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+          opens: '00:00',
+          closes: '23:59',
+        },
+      ],
+    },
+    {
+      '@type': 'WebSite',
+      '@id': `${SITE_URL}/#website`,
+      url: SITE_URL,
+      name: BRAND.name,
+      inLanguage: 'uk-UA',
+      publisher: { '@id': `${SITE_URL}/#store` },
     },
   ],
 }
@@ -112,7 +137,7 @@ export default async function HomePage() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(homeJsonLd) }}
       />
       <SiteHeader />
 
@@ -126,7 +151,9 @@ export default async function HomePage() {
             <h2 className="text-4xl sm:text-5xl font-black text-center text-neutral-900 mb-14">
               Популярні категорії
             </h2>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 sm:gap-6">
+            {/* Flex-wrap + justify-center keeps the final row centered, so 7
+                categories never leave a lonely card stranded on the left. */}
+            <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
               {popularCategories.map((c, i) => {
                 const Icon = iconForCategory(c.name)
                 const href = usingDbCats ? `/catalog/${c.slug}` : '/catalog'
@@ -134,9 +161,7 @@ export default async function HomePage() {
                   <Link
                     key={`${c.slug}-${i}`}
                     href={href}
-                    className={`group flex flex-col items-center justify-center gap-4 rounded-2xl border bg-white p-6 aspect-square hover:border-black transition-colors ${
-                      i === 0 ? 'border-black' : 'border-neutral-200'
-                    }`}
+                    className="group flex flex-col items-center justify-center gap-4 rounded-2xl border border-neutral-200 bg-white p-6 aspect-square basis-[calc(50%_-_0.5rem)] sm:basis-[calc(33.333%_-_1rem)] lg:basis-[calc(25%_-_1.125rem)] max-w-[260px] hover:border-black hover:shadow-sm transition-all"
                   >
                     <Icon className="w-9 h-9 text-neutral-900" strokeWidth={1.5} />
                     <span className="text-xs sm:text-sm font-semibold text-center text-neutral-800">

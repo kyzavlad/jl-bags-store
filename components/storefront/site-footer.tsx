@@ -41,15 +41,18 @@ export function SiteFooter() {
             </p>
             <div className="flex items-center gap-4 mt-6">
               <a href={SOCIAL.instagram} target="_blank" rel="noopener noreferrer"
-                aria-label="Instagram" className="text-neutral-500 hover:text-black transition-colors">
+                aria-label="Instagram" data-track-event="instagram_click"
+                className="text-neutral-500 hover:text-black transition-colors">
                 <Instagram className="w-5 h-5" />
               </a>
               <a href={SOCIAL.facebook} target="_blank" rel="noopener noreferrer"
-                aria-label="Facebook" className="text-neutral-500 hover:text-black transition-colors">
+                aria-label="Facebook" data-track-event="facebook_click"
+                className="text-neutral-500 hover:text-black transition-colors">
                 <Facebook className="w-5 h-5" />
               </a>
               <a href={SOCIAL.telegram} target="_blank" rel="noopener noreferrer"
-                aria-label="Telegram" className="text-neutral-500 hover:text-black transition-colors">
+                aria-label="Telegram" data-track-event="telegram_click"
+                className="text-neutral-500 hover:text-black transition-colors">
                 <Send className="w-5 h-5" />
               </a>
             </div>
@@ -84,7 +87,8 @@ export function SiteFooter() {
             <p className="text-xs tracking-widest uppercase text-neutral-900 mb-5">Контакти</p>
             <ul className="space-y-3 text-sm">
               <li>
-                <a href={`tel:${BRAND.phone}`} className="hover:text-black transition-colors text-base font-medium text-neutral-900">
+                <a href={`tel:${BRAND.phone}`} data-track-event="phone_click"
+                  className="hover:text-black transition-colors text-base font-medium text-neutral-900">
                   {BRAND.phoneDisplay}
                 </a>
               </li>
@@ -93,15 +97,18 @@ export function SiteFooter() {
             </ul>
             <div className="flex items-center gap-4 mt-5">
               <a href={SOCIAL.instagram} target="_blank" rel="noopener noreferrer"
-                aria-label="Instagram" className="text-neutral-500 hover:text-black transition-colors">
+                aria-label="Instagram" data-track-event="instagram_click"
+                className="text-neutral-500 hover:text-black transition-colors">
                 <Instagram className="w-5 h-5" />
               </a>
               <a href={SOCIAL.facebook} target="_blank" rel="noopener noreferrer"
-                aria-label="Facebook" className="text-neutral-500 hover:text-black transition-colors">
+                aria-label="Facebook" data-track-event="facebook_click"
+                className="text-neutral-500 hover:text-black transition-colors">
                 <Facebook className="w-5 h-5" />
               </a>
               <a href={SOCIAL.telegram} target="_blank" rel="noopener noreferrer"
-                aria-label="Telegram" className="text-neutral-500 hover:text-black transition-colors">
+                aria-label="Telegram" data-track-event="telegram_click"
+                className="text-neutral-500 hover:text-black transition-colors">
                 <Send className="w-5 h-5" />
               </a>
             </div>

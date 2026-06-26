@@ -6,8 +6,8 @@ import { SiteFooter } from '@/components/storefront/site-footer'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Умови використання — Julia Lebedeva Collection',
-  description: 'Умови використання сайту та умови замовлення Julia Lebedeva Collection.',
+  title: { absolute: 'Умови використання — JL Bags' },
+  description: 'Умови використання сайту та умови замовлення JL Bags.',
   alternates: { canonical: `${SITE_URL}/terms` },
   robots: { index: false, follow: true },
 }

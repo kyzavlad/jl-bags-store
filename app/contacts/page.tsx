@@ -3,21 +3,22 @@ import { Phone, Instagram, Facebook, Send } from 'lucide-react'
 import { BRAND, SOCIAL, SITE_URL } from '@/lib/seo'
 import { SiteHeader } from '@/components/storefront/site-header'
 import { SiteFooter } from '@/components/storefront/site-footer'
+import { PageViewTracker } from '@/components/analytics/PageViewTracker'
 
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Контакти — Julia Lebedeva Collection',
+  title: { absolute: 'Контакти JL Bags — Харків, доставка по Україні' },
   description:
-    'Зв\'яжіться з Julia Lebedeva Collection: телефон, Instagram, Facebook, Telegram. Жіночі сумки з доставкою по всій Україні.',
+    'Зв\'яжіться з JL Bags: телефон 0957427720, Instagram, Facebook, Telegram. Жіночі сумки від виробника з Харкова, доставка Новою Поштою та Укрпоштою по всій Україні.',
   alternates: { canonical: `${SITE_URL}/contacts` },
 }
 
 const ITEMS = [
-  { Icon: Phone,     label: 'Телефон',   value: BRAND.phoneDisplay,     href: `tel:${BRAND.phone}` },
-  { Icon: Instagram, label: 'Instagram', value: SOCIAL.instagramHandle, href: SOCIAL.instagram },
-  { Icon: Facebook,  label: 'Facebook',  value: SOCIAL.facebookName,    href: SOCIAL.facebook },
-  { Icon: Send,      label: 'Telegram',  value: 'Написати в Telegram',  href: SOCIAL.telegram },
+  { Icon: Phone,     label: 'Телефон',   value: BRAND.phoneDisplay,     href: `tel:${BRAND.phone}`,  track: 'phone_click' },
+  { Icon: Instagram, label: 'Instagram', value: SOCIAL.instagramHandle, href: SOCIAL.instagram,      track: 'instagram_click' },
+  { Icon: Facebook,  label: 'Facebook',  value: SOCIAL.facebookName,    href: SOCIAL.facebook,       track: 'facebook_click' },
+  { Icon: Send,      label: 'Telegram',  value: 'Написати в Telegram',  href: SOCIAL.telegram,       track: 'telegram_click' },
 ]
 
 export default function ContactsPage() {
@@ -25,6 +26,7 @@ export default function ContactsPage() {
     <>
       <SiteHeader />
       <main className="min-h-screen bg-white">
+        <PageViewTracker event="contact_view" />
         <div className="max-w-2xl mx-auto px-6 py-16">
           <h1 className="text-3xl sm:text-4xl font-black text-neutral-900 mb-12">Контакти</h1>
 
@@ -35,6 +37,7 @@ export default function ContactsPage() {
                   href={it.href}
                   target={it.href.startsWith('http') ? '_blank' : undefined}
                   rel={it.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                  data-track-event={it.track}
                   className="flex items-center gap-5 group"
                 >
                   <it.Icon className="w-6 h-6 shrink-0 text-neutral-700 group-hover:text-black transition-colors" />

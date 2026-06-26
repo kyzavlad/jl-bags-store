@@ -51,6 +51,7 @@ export function SiteHeader() {
             aria-label="Instagram"
             target="_blank"
             rel="noopener noreferrer"
+            data-track-event="instagram_click"
             className="text-neutral-500 hover:text-black transition-colors"
           >
             <Instagram className="w-4 h-4" />
@@ -60,6 +61,7 @@ export function SiteHeader() {
             aria-label="Facebook"
             target="_blank"
             rel="noopener noreferrer"
+            data-track-event="facebook_click"
             className="text-neutral-500 hover:text-black transition-colors"
           >
             <Facebook className="w-4 h-4" />
@@ -67,6 +69,7 @@ export function SiteHeader() {
           <a
             href={`tel:${BRAND.phone}`}
             aria-label={BRAND.phoneDisplay}
+            data-track-event="phone_click"
             className="text-neutral-500 hover:text-black transition-colors"
           >
             <Phone className="w-4 h-4" />

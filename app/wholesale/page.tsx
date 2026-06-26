@@ -4,13 +4,14 @@ import { BRAND, WHOLESALE, SITE_URL } from '@/lib/seo'
 import { SiteHeader } from '@/components/storefront/site-header'
 import { SiteFooter } from '@/components/storefront/site-footer'
 import { FaqAccordion } from '@/components/storefront/faq-accordion'
+import { PageViewTracker } from '@/components/analytics/PageViewTracker'
 
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Оптовим покупцям та партнерам — Julia Lebedeva Collection',
+  title: { absolute: 'Оптовим покупцям та дропшиперам — JL Bags' },
   description:
-    'Вигідні умови співпраці для оптових покупців та дропшиперів. Власне виробництво, стабільна наявність, контент для продажів. Персональний менеджер по дропшипінгу.',
+    'Опт і дропшипінг жіночих сумок від виробника JL Bags: вигідні умови, власне виробництво, стабільна наявність, контент для продажів. Доставка по всій Україні.',
   alternates: { canonical: `${SITE_URL}/wholesale` },
 }
 
@@ -58,6 +59,7 @@ export default function WholesalePage() {
     <>
       <SiteHeader />
       <main className="min-h-screen bg-white">
+        <PageViewTracker event="wholesale_view" />
 
         {/* Black hero */}
         <section className="bg-neutral-950 text-white">
@@ -129,12 +131,14 @@ export default function WholesalePage() {
             <div className="flex flex-wrap items-center justify-center gap-3 mb-6">
               <a
                 href={`tel:${WHOLESALE.phone}`}
+                data-track-event="phone_click"
                 className="inline-flex items-center gap-2 rounded-full bg-white text-black px-6 py-3 text-sm font-semibold hover:bg-neutral-200 transition-colors"
               >
                 <Phone className="w-4 h-4" /> Зателефонувати
               </a>
               <a
                 href={WHOLESALE.viber}
+                data-track-event="phone_click"
                 className="inline-flex items-center gap-2 rounded-full bg-[#7360f2] text-white px-6 py-3 text-sm font-semibold hover:bg-[#6352d4] transition-colors"
               >
                 <MessageCircle className="w-4 h-4" /> Написати в Viber
@@ -143,6 +147,7 @@ export default function WholesalePage() {
                 href={WHOLESALE.telegram}
                 target="_blank"
                 rel="noopener noreferrer"
+                data-track-event="telegram_click"
                 className="inline-flex items-center gap-2 rounded-full bg-[#2AABEE] text-white px-6 py-3 text-sm font-semibold hover:bg-[#1a9de0] transition-colors"
               >
                 <Send className="w-4 h-4" /> Написати в Telegram
