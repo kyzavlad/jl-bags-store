@@ -138,7 +138,7 @@ export default function WholesalePage() {
               </a>
               <a
                 href={WHOLESALE.viber}
-                data-track-event="phone_click"
+                data-track-event="viber_click"
                 className="inline-flex items-center gap-2 rounded-full bg-[#7360f2] text-white px-6 py-3 text-sm font-semibold hover:bg-[#6352d4] transition-colors"
               >
                 <MessageCircle className="w-4 h-4" /> Написати в Viber

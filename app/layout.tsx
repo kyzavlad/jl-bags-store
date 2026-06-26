@@ -3,6 +3,7 @@ import './globals.css'
 import { SITE_URL, OG_IMAGE } from '@/lib/seo'
 import { Analytics } from '@/components/analytics/Analytics'
 import { ClickTracker } from '@/components/analytics/ClickTracker'
+import { RouteChangeTracker } from '@/components/analytics/RouteChangeTracker'
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -37,6 +38,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="bg-gray-50 text-gray-900 antialiased">
         <Analytics />
         <ClickTracker />
+        <RouteChangeTracker />
         {children}
       </body>
     </html>
