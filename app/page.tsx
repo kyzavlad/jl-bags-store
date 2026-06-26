@@ -126,7 +126,9 @@ export default async function HomePage() {
             <h2 className="text-4xl sm:text-5xl font-black text-center text-neutral-900 mb-14">
               Популярні категорії
             </h2>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 sm:gap-6">
+            {/* Flex-wrap + justify-center keeps the final row centered, so 7
+                categories never leave a lonely card stranded on the left. */}
+            <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
               {popularCategories.map((c, i) => {
                 const Icon = iconForCategory(c.name)
                 const href = usingDbCats ? `/catalog/${c.slug}` : '/catalog'
@@ -134,9 +136,7 @@ export default async function HomePage() {
                   <Link
                     key={`${c.slug}-${i}`}
                     href={href}
-                    className={`group flex flex-col items-center justify-center gap-4 rounded-2xl border bg-white p-6 aspect-square hover:border-black transition-colors ${
-                      i === 0 ? 'border-black' : 'border-neutral-200'
-                    }`}
+                    className="group flex flex-col items-center justify-center gap-4 rounded-2xl border border-neutral-200 bg-white p-6 aspect-square basis-[calc(50%_-_0.5rem)] sm:basis-[calc(33.333%_-_1rem)] lg:basis-[calc(25%_-_1.125rem)] max-w-[260px] hover:border-black hover:shadow-sm transition-all"
                   >
                     <Icon className="w-9 h-9 text-neutral-900" strokeWidth={1.5} />
                     <span className="text-xs sm:text-sm font-semibold text-center text-neutral-800">

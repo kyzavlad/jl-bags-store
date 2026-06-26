@@ -20,9 +20,15 @@ export const BRAND = {
 export const SOCIAL = {
   instagram: 'https://www.instagram.com/sumki_kharkov/',
   instagramHandle: '@sumki_kharkov',
-  facebook: 'https://www.facebook.com/',
+  facebook: 'https://www.facebook.com/sumki.kharkov.julia/',
   facebookName: 'Julia Lebedeva',
-  telegram: 'https://t.me/',
+  // Telegram has no confirmed public @username yet, so we deep-link by phone.
+  // `https://t.me/+<international number>` reliably opens the contact in the
+  // Telegram app / web on most platforms. If the client provides a stable
+  // public username (e.g. https://t.me/sumki_kharkov), swap it in here — a
+  // username link is more robust than a phone-based one across all browsers.
+  telegram: 'https://t.me/+380957427720',
+  telegramLabel: 'Написати в Telegram',
 }
 
 /** Wholesale / dropshipping manager contact. */
@@ -30,7 +36,9 @@ export const WHOLESALE = {
   phone: '+380985218707',
   phoneDisplay: '+380 98 521 87 07',
   viber: 'viber://chat?number=%2B380985218707',
-  telegram: 'https://t.me/',
+  // Phone-based Telegram deep link (matches the Viber number above). Replace
+  // with a public @username link if the client provides one.
+  telegram: 'https://t.me/+380985218707',
 }
 
 /** Storefront navigation: the default catalog categories in display order. */
