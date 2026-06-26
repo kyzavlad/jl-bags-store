@@ -7,7 +7,7 @@ export const revalidate = 86400
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date()
-  const staticPaths = ['/catalog', '/delivery-payment', '/wholesale', '/contacts']
+  const staticPaths = ['/catalog', '/delivery-payment', '/wholesale', '/contacts', '/privacy', '/terms']
   const base: MetadataRoute.Sitemap = [
     {
       url: SITE_URL,

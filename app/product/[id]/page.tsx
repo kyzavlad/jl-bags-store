@@ -41,11 +41,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const photo = (product.product_photos ?? []).find((p) => p.is_primary) ??
     (product.product_photos ?? [])[0]
 
+  const categoryName = product.categories?.name ?? product.category ?? null
+  const colors = (product.product_variants ?? [])
+    .filter((v) => v.quantity > 0)
+    .map((v) => v.color)
+  const colorText = colors.length > 0 ? `Кольори: ${colors.slice(0, 6).join(', ')}` : null
+
   const descParts = [
     product.name,
+    categoryName,
     product.material ? `Матеріал: ${product.material}` : null,
     product.size_text ? `Розмір: ${product.size_text}` : null,
-    product.category ? `${product.category}` : null,
+    colorText,
+    product.price_retail > 0 ? `Ціна: ${product.price_retail} грн` : null,
     `Доставка ${BRAND.delivery.join(', ')} по Україні.`,
   ]
     .filter(Boolean)
