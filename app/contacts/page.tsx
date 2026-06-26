@@ -7,9 +7,9 @@ import { SiteFooter } from '@/components/storefront/site-footer'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Контакти — Julia Lebedeva Collection',
+  title: { absolute: 'Контакти JL Bags — Харків, доставка по Україні' },
   description:
-    'Зв\'яжіться з Julia Lebedeva Collection: телефон, Instagram, Facebook, Telegram. Жіночі сумки з доставкою по всій Україні.',
+    'Зв\'яжіться з JL Bags: телефон 0957427720, Instagram, Facebook, Telegram. Жіночі сумки від виробника з Харкова, доставка Новою Поштою та Укрпоштою по всій Україні.',
   alternates: { canonical: `${SITE_URL}/contacts` },
 }
 

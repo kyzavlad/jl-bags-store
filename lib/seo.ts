@@ -41,6 +41,30 @@ export const WHOLESALE = {
   telegram: 'https://t.me/+380985218707',
 }
 
+/** Default Open Graph / Twitter share image (brand logo, square). */
+export const OG_IMAGE = '/logo.png'
+
+/** Canonical social profiles for schema.org `sameAs`. */
+export const SAME_AS: string[] = [SOCIAL.facebook, SOCIAL.instagram]
+
+/**
+ * Build commercial SEO copy for a database-driven category from its real name.
+ * Used when a category has no hand-written CATEGORY_META entry. Natural tone,
+ * mentions delivery across Ukraine — no keyword stuffing.
+ */
+export function categorySeo(name: string): { title: string; description: string; intro: string } {
+  const clean = (name || '').trim() || 'Жіночі сумки'
+  return {
+    title: `${clean} — купити в JL Bags з доставкою по Україні`,
+    description:
+      `${clean} від українського виробника JL Bags: натуральні матеріали, великий вибір ` +
+      `кольорів та моделей. Доставка Новою Поштою та Укрпоштою по всій Україні, оплата при отриманні.`,
+    intro:
+      `${clean} від JL Bags — жіночі сумки та аксесуари від виробника з Харкова. Якісні матеріали, ` +
+      `актуальні моделі та швидка доставка по всій Україні.`,
+  }
+}
+
 /** Storefront navigation: the default catalog categories in display order. */
 export const NAV_CATEGORIES: { slug: string; name: string; icon: string }[] = [
   { slug: 'phone-bags', name: 'Для телефону', icon: '📱' },

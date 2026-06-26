@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { ArrowRight, Phone } from 'lucide-react'
-import { BRAND, SITE_URL } from '@/lib/seo'
+import { BRAND, SITE_URL, OG_IMAGE } from '@/lib/seo'
 import { fetchActiveCategories, FALLBACK_CATEGORIES, iconForCategory } from '@/lib/categories'
 import { SiteHeader } from '@/components/storefront/site-header'
 import { SiteFooter } from '@/components/storefront/site-footer'
@@ -11,17 +11,27 @@ export const dynamic = 'force-dynamic'
 const canonical = `${SITE_URL}/catalog`
 
 export const metadata: Metadata = {
-  title: 'Каталог жіночих сумок — купити в JL Bags з доставкою по Україні',
+  title: { absolute: 'Каталог жіночих сумок — купити в JL Bags з доставкою по Україні' },
   description:
-    'Каталог жіночих сумок JL Bags: замшеві та еко-шкіряні сумки, сумочки для телефону, шопери, рюкзаки, гаманці. Доставка Новою Поштою та Укрпоштою по всій Україні.',
+    'Каталог жіночих сумок JL Bags від виробника: замшеві та еко-шкіряні сумки, сумочки для телефону, шопери, рюкзаки, гаманці. Доставка Новою Поштою та Укрпоштою по всій Україні.',
   alternates: { canonical },
   openGraph: {
-    title: 'Каталог — JL Bags',
-    description: 'Жіночі сумки з доставкою по всій Україні.',
+    title: 'Каталог жіночих сумок — JL Bags',
+    description: 'Жіночі сумки від виробника з доставкою по всій Україні.',
     url: canonical,
     type: 'website',
     siteName: 'JL Bags',
+    images: [{ url: OG_IMAGE, alt: 'JL Bags — каталог жіночих сумок' }],
   },
+}
+
+const breadcrumbJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Головна', item: SITE_URL },
+    { '@type': 'ListItem', position: 2, name: 'Каталог', item: canonical },
+  ],
 }
 
 export default async function CatalogPage() {
@@ -33,6 +43,10 @@ export default async function CatalogPage() {
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <SiteHeader />
       <main className="min-h-screen bg-white">
         {/* Page header */}

@@ -6,8 +6,8 @@ import { SiteFooter } from '@/components/storefront/site-footer'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Політика конфіденційності — Julia Lebedeva Collection',
-  description: 'Політика конфіденційності Julia Lebedeva Collection: які дані ми збираємо та як їх використовуємо.',
+  title: { absolute: 'Політика конфіденційності — JL Bags' },
+  description: 'Політика конфіденційності JL Bags: які дані ми збираємо та як їх використовуємо.',
   alternates: { canonical: `${SITE_URL}/privacy` },
   robots: { index: false, follow: true },
 }

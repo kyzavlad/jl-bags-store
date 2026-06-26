@@ -37,7 +37,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
   if (!product) return { title: 'Товар не знайдено' }
 
-  const title = `${product.name} — JL Bags`
+  const title = `${product.name} — купити в JL Bags`
   const photo = (product.product_photos ?? []).find((p) => p.is_primary) ??
     (product.product_photos ?? [])[0]
 
@@ -62,7 +62,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const canonical = `${SITE_URL}/product/${product.id}`
 
   return {
-    title,
+    // `absolute` so the root template doesn't append a second "| JL Bags".
+    title: { absolute: title },
     description: descParts,
     alternates: { canonical },
     openGraph: {
@@ -93,20 +94,30 @@ export default async function ProductPage({ params }: Props) {
   const variants = product.product_variants ?? []
   const inStockVariants = variants.filter((v) => v.quantity > 0)
 
-  const jsonLd = {
-    '@context': 'https://schema.org',
+  const categorySlug = product.categories?.slug ?? null
+  const categoryName = product.categories?.name ?? product.category ?? null
+  const productUrl = `${SITE_URL}/product/${product.id}`
+  const colorList = inStockVariants.map((v) => v.color)
+
+  const productJsonLd = {
     '@type': 'Product',
+    '@id': `${productUrl}#product`,
     name: product.name,
     ...(product.description ? { description: product.description } : {}),
     image: photos.map((p) => p.url),
     brand: { '@type': 'Brand', name: BRAND.name },
     sku: product.code,
+    mpn: product.code,
     ...(product.material ? { material: product.material } : {}),
+    ...(colorList.length > 0 ? { color: colorList.join(', ') } : {}),
+    ...(categoryName ? { category: categoryName } : {}),
+    itemCondition: 'https://schema.org/NewCondition',
     offers: {
       '@type': 'Offer',
-      url: `${SITE_URL}/product/${product.id}`,
+      url: productUrl,
       priceCurrency: 'UAH',
       ...(product.price_retail > 0 ? { price: product.price_retail } : {}),
+      itemCondition: 'https://schema.org/NewCondition',
       availability: inStock
         ? 'https://schema.org/InStock'
         : 'https://schema.org/OutOfStock',
@@ -114,8 +125,23 @@ export default async function ProductPage({ params }: Props) {
     },
   }
 
-  const categorySlug = product.categories?.slug ?? null
-  const categoryName = product.categories?.name ?? product.category ?? null
+  // Breadcrumb mirrors the on-page trail: Головна › Каталог › [Категорія] › Товар.
+  const crumbs = [
+    { '@type': 'ListItem', position: 1, name: 'Головна', item: SITE_URL },
+    { '@type': 'ListItem', position: 2, name: 'Каталог', item: `${SITE_URL}/catalog` },
+    ...(categoryName && categorySlug
+      ? [{ '@type': 'ListItem', position: 3, name: categoryName, item: `${SITE_URL}/catalog/${categorySlug}` }]
+      : []),
+  ]
+  crumbs.push({ '@type': 'ListItem', position: crumbs.length + 1, name: product.name, item: productUrl })
+
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      productJsonLd,
+      { '@type': 'BreadcrumbList', itemListElement: crumbs },
+    ],
+  }
 
   return (
     <>

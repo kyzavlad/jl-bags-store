@@ -6,7 +6,7 @@ import {
   MapPin, Clock,
 } from 'lucide-react'
 import { getServiceSupabase } from '@/lib/supabase/server'
-import { BRAND, SITE_URL } from '@/lib/seo'
+import { BRAND, SITE_URL, SAME_AS, OG_IMAGE } from '@/lib/seo'
 import { fetchActiveCategories, FALLBACK_CATEGORIES, iconForCategory } from '@/lib/categories'
 import { SiteHeader } from '@/components/storefront/site-header'
 import { SiteFooter } from '@/components/storefront/site-footer'
@@ -19,16 +19,18 @@ import type { Product } from '@/lib/types'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'JL Bags — жіночі сумки з доставкою по Україні',
+  // `absolute` so the root template doesn't append a second "| JL Bags".
+  title: { absolute: 'JL Bags — жіночі сумки від виробника з доставкою по Україні' },
   description:
-    'JL Bags — жіночі сумки з Харкова: сумочки для телефону, замшеві та еко-шкіряні моделі, шопери, рюкзаки. Доставка Новою Поштою та Укрпоштою по всій Україні.',
+    'JL Bags — жіночі сумки від українського виробника з Харкова: сумочки для телефону, замшеві та еко-шкіряні сумки, шопери, рюкзаки, аксесуари. Доставка Новою Поштою та Укрпоштою по всій Україні.',
   alternates: { canonical: SITE_URL },
   openGraph: {
-    title: 'JL Bags — жіночі сумки',
+    title: 'JL Bags — жіночі сумки від виробника',
     description:
-      'Жіночі сумки з Харкова: сумочки для телефону, замшеві та еко-шкіряні моделі, шопери, рюкзаки. Доставка по всій Україні.',
+      'Жіночі сумки від виробника з Харкова: сумочки для телефону, замшеві та еко-шкіряні моделі, шопери, рюкзаки. Доставка по всій Україні.',
     url: SITE_URL,
     type: 'website',
+    images: [{ url: OG_IMAGE, width: 1339, height: 1339, alt: 'JL Bags — жіночі сумки' }],
   },
 }
 
@@ -55,29 +57,52 @@ const STATS = [
   { value: '100%',   label: 'Контроль якості' },
 ]
 
-const localBusinessJsonLd = {
+const homeJsonLd = {
   '@context': 'https://schema.org',
-  '@type': 'Store',
-  name: BRAND.name,
-  alternateName: BRAND.collection,
-  image: `${SITE_URL}/logo.png`,
-  url: SITE_URL,
-  telephone: BRAND.phone,
-  priceRange: '₴₴',
-  description: 'Жіночі сумки з Харкова: сумочки для телефону, замшеві та еко-шкіряні моделі, шопери, рюкзаки. Доставка по всій Україні.',
-  areaServed: { '@type': 'Country', name: 'Ukraine' },
-  address: {
-    '@type': 'PostalAddress',
-    addressLocality: BRAND.city,
-    addressRegion: BRAND.region,
-    addressCountry: 'UA',
-  },
-  openingHoursSpecification: [
+  '@graph': [
     {
-      '@type': 'OpeningHoursSpecification',
-      dayOfWeek: ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'],
-      opens: '00:00',
-      closes: '23:59',
+      '@type': 'Store',
+      '@id': `${SITE_URL}/#store`,
+      name: BRAND.name,
+      alternateName: BRAND.collection,
+      image: `${SITE_URL}/logo.png`,
+      logo: `${SITE_URL}/logo.png`,
+      url: SITE_URL,
+      telephone: BRAND.phone,
+      priceRange: '₴₴',
+      description:
+        'Жіночі сумки від українського виробника з Харкова: сумочки для телефону, замшеві та еко-шкіряні моделі, шопери, рюкзаки, аксесуари. Доставка по всій Україні.',
+      areaServed: { '@type': 'Country', name: 'Ukraine' },
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: BRAND.city,
+        addressRegion: BRAND.region,
+        addressCountry: 'UA',
+      },
+      contactPoint: {
+        '@type': 'ContactPoint',
+        telephone: BRAND.phone,
+        contactType: 'customer service',
+        areaServed: 'UA',
+        availableLanguage: ['uk', 'ru'],
+      },
+      sameAs: SAME_AS,
+      openingHoursSpecification: [
+        {
+          '@type': 'OpeningHoursSpecification',
+          dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+          opens: '00:00',
+          closes: '23:59',
+        },
+      ],
+    },
+    {
+      '@type': 'WebSite',
+      '@id': `${SITE_URL}/#website`,
+      url: SITE_URL,
+      name: BRAND.name,
+      inLanguage: 'uk-UA',
+      publisher: { '@id': `${SITE_URL}/#store` },
     },
   ],
 }
@@ -112,7 +137,7 @@ export default async function HomePage() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(homeJsonLd) }}
       />
       <SiteHeader />
 

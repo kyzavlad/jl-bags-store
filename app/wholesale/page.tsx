@@ -8,9 +8,9 @@ import { FaqAccordion } from '@/components/storefront/faq-accordion'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Оптовим покупцям та партнерам — Julia Lebedeva Collection',
+  title: { absolute: 'Оптовим покупцям та дропшиперам — JL Bags' },
   description:
-    'Вигідні умови співпраці для оптових покупців та дропшиперів. Власне виробництво, стабільна наявність, контент для продажів. Персональний менеджер по дропшипінгу.',
+    'Опт і дропшипінг жіночих сумок від виробника JL Bags: вигідні умови, власне виробництво, стабільна наявність, контент для продажів. Доставка по всій Україні.',
   alternates: { canonical: `${SITE_URL}/wholesale` },
 }
 
