@@ -23,12 +23,14 @@ export function trackEvent(
     window.gtag('event', event, params ?? {})
   }
 
-  // Google Ads conversion (only for explicit conversion events)
-  const adsId = process.env.NEXT_PUBLIC_GOOGLE_ADS_ID
-  if (typeof window.gtag === 'function' && adsId && isConversionEvent(event)) {
+  // Google Ads conversion. A Google Ads conversion needs a specific
+  // conversion action label, not just the account ID — the full send_to
+  // value (e.g. "AW-123456789/AbCdEfGhIjKlMnOp"). Without it, no conversion
+  // is fired even if a conversion-worthy event occurs.
+  const sendTo = process.env.NEXT_PUBLIC_GOOGLE_ADS_CONVERSION_SEND_TO
+  if (typeof window.gtag === 'function' && sendTo && isConversionEvent(event)) {
     window.gtag('event', 'conversion', {
-      send_to: adsId,
-      event_category: 'engagement',
+      send_to: sendTo,
       event_label: event,
       ...params,
     })
@@ -41,13 +43,14 @@ export function trackEvent(
 }
 
 function isConversionEvent(event: string): boolean {
-  return ['phone_click', 'telegram_click'].includes(event)
+  return ['phone_click', 'telegram_click', 'viber_click'].includes(event)
 }
 
 function toMetaEvent(event: string): string {
   const MAP: Record<string, string> = {
     phone_click: 'Contact',
     telegram_click: 'Contact',
+    viber_click: 'Contact',
     facebook_click: 'Contact',
     instagram_click: 'ViewContent',
     category_view: 'ViewContent',

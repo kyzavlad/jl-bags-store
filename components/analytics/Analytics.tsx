@@ -4,22 +4,35 @@ import Script from 'next/script'
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID
 const PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID
+const ADS_SEND_TO = process.env.NEXT_PUBLIC_GOOGLE_ADS_CONVERSION_SEND_TO
+
+// The Google Ads account ID (AW-XXXXXXXXXX) is the part of the conversion
+// send_to before the "/". gtag.js must be configured with it for the account
+// to register conversions, even when GA4 isn't in use.
+const ADS_ID = ADS_SEND_TO ? ADS_SEND_TO.split('/')[0] : undefined
+
+// gtag.js is shared between GA4 and Google Ads — load it if either is set.
+const GTAG_SRC_ID = GA_ID || ADS_ID
 
 /**
- * Loads GA4 and Meta Pixel scripts when env vars are set.
- * Renders nothing if vars are absent — safe in development.
+ * Loads gtag.js (GA4 and/or Google Ads) and Meta Pixel when their env vars
+ * are set. Renders nothing if vars are absent — safe in development.
  */
 export function Analytics() {
   return (
     <>
-      {GA_ID && (
+      {GTAG_SRC_ID && (
         <>
           <Script
-            src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
+            src={`https://www.googletagmanager.com/gtag/js?id=${GTAG_SRC_ID}`}
             strategy="afterInteractive"
           />
-          <Script id="ga4-init" strategy="afterInteractive">
-            {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${GA_ID}',{page_path:window.location.pathname});`}
+          <Script id="gtag-init" strategy="afterInteractive">
+            {[
+              `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());`,
+              GA_ID ? `gtag('config','${GA_ID}',{page_path:window.location.pathname});` : '',
+              ADS_ID ? `gtag('config','${ADS_ID}');` : '',
+            ].join('')}
           </Script>
         </>
       )}
