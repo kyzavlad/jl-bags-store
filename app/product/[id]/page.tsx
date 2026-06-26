@@ -6,6 +6,7 @@ import { getServiceSupabase } from '@/lib/supabase/server'
 import { BRAND, SITE_URL } from '@/lib/seo'
 import { SiteHeader } from '@/components/storefront/site-header'
 import { SiteFooter } from '@/components/storefront/site-footer'
+import { PageViewTracker } from '@/components/analytics/PageViewTracker'
 import type { Product } from '@/lib/types'
 
 export const dynamic = 'force-dynamic'
@@ -151,6 +152,7 @@ export default async function ProductPage({ params }: Props) {
       />
       <SiteHeader />
       <main className="min-h-screen bg-white">
+        <PageViewTracker event="product_view" params={{ product_id: product.id, product_name: product.name }} />
         <div className="max-w-5xl mx-auto px-6 py-10">
           {/* Breadcrumb */}
           <nav className="text-xs text-neutral-400 mb-8 flex flex-wrap gap-2 items-center tracking-wider uppercase" aria-label="Breadcrumb">
@@ -283,6 +285,7 @@ export default async function ProductPage({ params }: Props) {
               <div className="border-t border-neutral-200 pt-5 space-y-3">
                 <a
                   href={`tel:${BRAND.phone}`}
+                  data-track-event="phone_click"
                   className="flex items-center justify-center gap-3 w-full bg-neutral-950 text-white text-xs font-medium tracking-[0.2em] uppercase py-4 hover:bg-neutral-800 transition-colors"
                 >
                   <span>📞</span> Замовити: {BRAND.phoneDisplay}

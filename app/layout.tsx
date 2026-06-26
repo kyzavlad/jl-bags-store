@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import { SITE_URL, OG_IMAGE } from '@/lib/seo'
+import { Analytics } from '@/components/analytics/Analytics'
+import { ClickTracker } from '@/components/analytics/ClickTracker'
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -32,7 +34,11 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="uk">
-      <body className="bg-gray-50 text-gray-900 antialiased">{children}</body>
+      <body className="bg-gray-50 text-gray-900 antialiased">
+        <Analytics />
+        <ClickTracker />
+        {children}
+      </body>
     </html>
   )
 }

@@ -5,6 +5,7 @@ import { BRAND, SITE_URL, OG_IMAGE } from '@/lib/seo'
 import { fetchActiveCategories, FALLBACK_CATEGORIES, iconForCategory } from '@/lib/categories'
 import { SiteHeader } from '@/components/storefront/site-header'
 import { SiteFooter } from '@/components/storefront/site-footer'
+import { PageViewTracker } from '@/components/analytics/PageViewTracker'
 
 export const dynamic = 'force-dynamic'
 
@@ -49,6 +50,7 @@ export default async function CatalogPage() {
       />
       <SiteHeader />
       <main className="min-h-screen bg-white">
+        <PageViewTracker event="catalog_view" />
         {/* Page header */}
         <div className="border-b border-neutral-200">
           <div className="max-w-7xl mx-auto px-6 py-12 text-center">

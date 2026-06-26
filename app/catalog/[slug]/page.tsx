@@ -7,6 +7,7 @@ import { BRAND, CATEGORY_META, SITE_URL, OG_IMAGE, categorySeo } from '@/lib/seo
 import { SiteHeader } from '@/components/storefront/site-header'
 import { SiteFooter } from '@/components/storefront/site-footer'
 import { ProductCard } from '@/components/storefront/product-card'
+import { PageViewTracker } from '@/components/analytics/PageViewTracker'
 import type { Category, Product } from '@/lib/types'
 
 export const dynamic = 'force-dynamic'
@@ -110,6 +111,7 @@ export default async function CategoryPage({ params }: Props) {
       />
       <SiteHeader />
       <main className="min-h-screen bg-white">
+        <PageViewTracker event="category_view" params={{ category: category.name, slug: params.slug }} />
         {/* Page header */}
         <div className="border-b border-neutral-200 bg-white">
           <div className="max-w-7xl mx-auto px-6 py-10">
