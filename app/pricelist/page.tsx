@@ -37,9 +37,9 @@ export default async function PricelistPage({
   if (!expectedKey) {
     return (
       <Centered>
-        <h1 className="text-lg font-semibold">Прайс-лист не настроен</h1>
+        <h1 className="text-lg font-semibold">Прайс-лист не налаштовано</h1>
         <p className="text-sm text-gray-600 mt-1">
-          Переменная окружения <code>PRICELIST_KEY</code> не задана.
+          Змінна середовища <code>PRICELIST_KEY</code> не задана.
         </p>
       </Centered>
     )
@@ -48,9 +48,9 @@ export default async function PricelistPage({
   if (providedKey !== expectedKey) {
     return (
       <Centered>
-        <h1 className="text-lg font-semibold">Доступ закрыт</h1>
+        <h1 className="text-lg font-semibold">Доступ закрито</h1>
         <p className="text-sm text-gray-600 mt-1">
-          Неверный или отсутствующий ключ доступа. Откройте ссылку с параметром{' '}
+          Невірний або відсутній ключ доступу. Відкрийте посилання з параметром{' '}
           <code>?key=…</code>
         </p>
       </Centered>
@@ -62,13 +62,13 @@ export default async function PricelistPage({
   try {
     products = await loadProducts()
   } catch (e: any) {
-    loadError = e?.message ?? 'Ошибка загрузки'
+    loadError = e?.message ?? 'Помилка завантаження'
   }
 
   if (loadError) {
     return (
       <Centered>
-        <h1 className="text-lg font-semibold text-red-700">Ошибка загрузки прайса</h1>
+        <h1 className="text-lg font-semibold text-red-700">Помилка завантаження прайсу</h1>
         <p className="text-sm text-gray-600 mt-1">{loadError}</p>
       </Centered>
     )
