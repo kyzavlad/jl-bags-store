@@ -7,11 +7,12 @@ import {
   Instagram,
   Facebook,
   Send,
-  MessageCircle,
   Phone,
-  Truck,
-  Clock,
-  ChevronRight,
+  MoreHorizontal,
+  Globe,
+  Sparkles,
+  Check,
+  Heart,
 } from 'lucide-react'
 import { SITE_URL, OG_IMAGE } from '@/lib/seo'
 
@@ -19,6 +20,7 @@ export const dynamic = 'force-dynamic'
 
 const PHONE = '+380964249565'
 const PHONE_DISPLAY = '+38 096 424 95 65'
+const HANDLE = '@sumki_kharkov'
 
 export const metadata: Metadata = {
   title: { absolute: 'JL Bags | Посилання' },
@@ -35,36 +37,38 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 }
 
-type LinkButton = {
+const STEPS: { n: number; text: string; Icon: typeof MoreHorizontal }[] = [
+  { n: 1, text: 'Натисни на три крапки', Icon: MoreHorizontal },
+  { n: 2, text: 'Обери «Відкрити в браузері»', Icon: Globe },
+  { n: 3, text: 'Сторінка відкриється в браузері', Icon: Sparkles },
+  { n: 4, text: 'Тепер кнопки працюють', Icon: Check },
+]
+
+const CARDS = [
+  { src: '/hero/hero-1.jpg', alt: 'Жіноча сумка JL Bags' },
+  { src: '/hero/hero-2.jpg', alt: 'Замшева сумка JL Bags' },
+  { src: '/hero/hero-3.jpg', alt: 'Шкіряна сумка JL Bags' },
+  { src: '/about.jpg', alt: 'Колекція сумок JL Bags' },
+]
+
+const SMALL_LINKS: {
   label: string
   href: string
-  Icon: typeof ShoppingBag
+  Icon: typeof Instagram
   external?: boolean
   track?: string
-  variant?: 'primary' | 'default'
-}
-
-const BUTTONS: LinkButton[] = [
-  { label: 'Перейти в каталог', href: '/catalog', Icon: ShoppingBag, variant: 'primary' },
-  { label: 'Прайс-лист', href: '/pricelist?key=jlprice2026', Icon: FileText },
+}[] = [
   { label: 'Instagram', href: 'https://instagram.com/sumki_kharkov', Icon: Instagram, external: true, track: 'instagram_click' },
   { label: 'Facebook', href: 'https://facebook.com/', Icon: Facebook, external: true, track: 'facebook_click' },
   { label: 'Telegram', href: 'https://t.me/', Icon: Send, external: true, track: 'telegram_click' },
-  { label: 'Написати менеджеру', href: `tel:${PHONE}`, Icon: MessageCircle, track: 'phone_click' },
+  { label: 'Прайс-лист', href: '/pricelist?key=jlprice2026', Icon: FileText },
   { label: 'Подзвонити', href: `tel:${PHONE}`, Icon: Phone, track: 'phone_click' },
-]
-
-const CATEGORIES = [
-  { label: 'Сумочки для телефону', href: '/catalog/phone-bags' },
-  { label: 'Замшеві сумки', href: '/catalog/suede-bags' },
-  { label: 'Жіночі шопери', href: '/catalog/shoppers' },
-  { label: 'Рюкзаки', href: '/catalog/backpacks' },
 ]
 
 export default function LinksPage() {
   return (
-    <main className="min-h-screen bg-[#f6efe6] text-neutral-900">
-      <div className="mx-auto w-full max-w-md px-5 py-10 sm:py-14">
+    <main className="min-h-screen bg-[#f7efe7] text-[#3f3733]">
+      <div className="mx-auto w-full max-w-md px-5 py-9">
 
         {/* Brand */}
         <header className="flex flex-col items-center text-center">
@@ -78,99 +82,146 @@ export default function LinksPage() {
               className="w-full h-full object-cover"
             />
           </div>
-          <h1 className="mt-5 text-2xl font-black tracking-tight">JL Bags</h1>
-          <p className="mt-2 text-sm font-medium text-neutral-700">
+          <h1 className="mt-4 text-3xl font-black tracking-tight text-[#2f2925]">JL Bags</h1>
+          <p className="mt-1.5 text-[11px] font-semibold uppercase tracking-[0.28em] text-[#a9707a]">
+            Жіночі сумки
+          </p>
+          <p className="mt-3 text-[13px] leading-relaxed text-[#6f645d] max-w-[19rem]">
             Жіночі сумки з доставкою по всій Україні
           </p>
-          <p className="mt-3 text-[13px] leading-relaxed text-neutral-500">
-            Сумки для телефону, шопери, рюкзаки, замшеві та шкіряні моделі.
-            Замовлення приймаємо онлайн, відправка Новою поштою та Укрпоштою.
-          </p>
+          <Heart className="mt-3 w-4 h-4 text-[#c98a94]" fill="currentColor" />
         </header>
 
-        {/* Link buttons */}
-        <nav className="mt-8 flex flex-col gap-3" aria-label="Посилання JL Bags">
-          {BUTTONS.map((b) => {
-            const cls =
-              b.variant === 'primary'
-                ? 'bg-neutral-900 text-white hover:bg-neutral-800'
-                : 'bg-white text-neutral-900 hover:bg-neutral-50 ring-1 ring-black/5'
-            const inner = (
-              <>
-                <b.Icon className="w-5 h-5 shrink-0" strokeWidth={1.75} />
-                <span className="flex-1 text-center">{b.label}</span>
-                <ChevronRight className="w-4 h-4 shrink-0 opacity-40" />
-              </>
-            )
-            const base =
-              `flex items-center gap-3 w-full rounded-full px-5 py-3.5 text-sm font-semibold shadow-sm transition-colors ${cls}`
-
-            return b.external ? (
-              <a
-                key={b.label}
-                href={b.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                data-track-event={b.track}
-                className={base}
+        {/* How to open in browser */}
+        <section className="mt-6" aria-label="Як відкрити в браузері">
+          <h2 className="text-center text-lg font-bold text-[#2f2925]">Як відкрити в браузері?</h2>
+          <div className="mt-4 grid grid-cols-2 gap-2.5">
+            {STEPS.map((s) => (
+              <div
+                key={s.n}
+                className="flex items-center gap-2.5 rounded-2xl bg-white/70 ring-1 ring-black/5 px-3 py-3"
               >
-                {inner}
-              </a>
-            ) : b.href.startsWith('tel:') ? (
-              <a key={b.label} href={b.href} data-track-event={b.track} className={base}>
-                {inner}
-              </a>
-            ) : (
-              <Link key={b.label} href={b.href} className={base}>
-                {inner}
-              </Link>
-            )
-          })}
-        </nav>
+                <span className="flex items-center justify-center w-7 h-7 shrink-0 rounded-full bg-[#e7d3d3] text-[#a9505f] text-xs font-bold">
+                  {s.n}
+                </span>
+                <span className="text-[12px] leading-tight text-[#5c534d]">{s.text}</span>
+              </div>
+            ))}
+          </div>
+        </section>
 
-        {/* Popular categories */}
-        <section className="mt-8" aria-label="Популярні категорії">
-          <h2 className="text-xs font-bold uppercase tracking-widest text-neutral-500 text-center mb-3">
-            Популярні категорії
-          </h2>
-          <div className="grid grid-cols-2 gap-2.5">
-            {CATEGORIES.map((c) => (
+        {/* Style grid */}
+        <section className="mt-8" aria-label="Твій стиль щодня">
+          <h2 className="text-center text-xl font-black text-[#2f2925]">Твій стиль щодня</h2>
+          <p className="mt-1 text-center text-[12px] font-semibold text-[#a9707a]">
+            Новинки · Обери свою сумку
+          </p>
+          <div className="mt-4 grid grid-cols-4 gap-1.5">
+            {CARDS.map((c) => (
               <Link
-                key={c.href}
-                href={c.href}
-                className="rounded-2xl bg-white ring-1 ring-black/5 px-4 py-3 text-[13px] font-medium text-center text-neutral-800 hover:bg-neutral-50 transition-colors"
+                key={c.src}
+                href="/catalog"
+                className="relative block aspect-[3/4] overflow-hidden rounded-xl ring-1 ring-black/5 bg-neutral-100"
+                aria-label={c.alt}
               >
-                {c.label}
+                <Image
+                  src={c.src}
+                  alt={c.alt}
+                  fill
+                  sizes="(max-width: 448px) 25vw, 112px"
+                  className="object-cover"
+                />
               </Link>
             ))}
           </div>
         </section>
 
-        {/* Contact block */}
-        <section className="mt-8 rounded-2xl bg-white ring-1 ring-black/5 p-5 text-sm">
-          <ul className="space-y-3">
-            <li className="flex items-center gap-3">
-              <Phone className="w-4 h-4 text-neutral-500 shrink-0" />
-              <span className="text-neutral-500">Телефон:</span>
-              <a href={`tel:${PHONE}`} data-track-event="phone_click" className="ml-auto font-semibold text-neutral-900 hover:underline">
-                {PHONE_DISPLAY}
+        {/* Primary + secondary buttons */}
+        <section className="mt-7 space-y-3">
+          <Link
+            href="/catalog"
+            className="flex items-center gap-3 w-full rounded-2xl px-5 py-4 shadow-sm bg-gradient-to-r from-[#b3596a] to-[#a24d5e] text-white hover:from-[#a24d5e] hover:to-[#8f4152] transition-colors"
+          >
+            <ShoppingBag className="w-6 h-6 shrink-0" strokeWidth={1.75} />
+            <span className="flex-1 text-center">
+              <span className="block text-base font-black tracking-wide">ПЕРЕЙТИ В КАТАЛОГ</span>
+              <span className="block text-[11px] font-medium text-white/80">Всі моделі та ціни</span>
+            </span>
+            <Send className="w-5 h-5 shrink-0" strokeWidth={1.75} />
+          </Link>
+
+          <a
+            href={`tel:${PHONE}`}
+            data-track-event="phone_click"
+            className="flex items-center gap-3 w-full rounded-2xl px-5 py-4 shadow-sm bg-gradient-to-r from-[#c3ab9c] to-[#b39a8a] text-white hover:from-[#b39a8a] hover:to-[#a3897a] transition-colors"
+          >
+            <Phone className="w-6 h-6 shrink-0" strokeWidth={1.75} />
+            <span className="flex-1 text-center">
+              <span className="block text-base font-black tracking-wide">НАПИСАТИ МЕНЕДЖЕРУ</span>
+              <span className="block text-[12px] font-semibold text-white/90">{PHONE_DISPLAY}</span>
+            </span>
+          </a>
+        </section>
+
+        {/* Smaller links */}
+        <section className="mt-4 grid grid-cols-2 gap-2.5" aria-label="Інші посилання">
+          {SMALL_LINKS.map((l) => {
+            const base =
+              'flex items-center gap-2.5 rounded-2xl bg-white ring-1 ring-black/5 px-4 py-3 text-sm font-semibold text-[#4a423c] hover:bg-[#faf5f0] transition-colors'
+            const inner = (
+              <>
+                <l.Icon className="w-4 h-4 shrink-0 text-[#a9707a]" strokeWidth={1.75} />
+                <span>{l.label}</span>
+              </>
+            )
+            return l.external ? (
+              <a
+                key={l.label}
+                href={l.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                data-track-event={l.track}
+                className={base}
+              >
+                {inner}
               </a>
+            ) : l.href.startsWith('tel:') ? (
+              <a key={l.label} href={l.href} data-track-event={l.track} className={base}>
+                {inner}
+              </a>
+            ) : (
+              <Link key={l.label} href={l.href} className={base}>
+                {inner}
+              </Link>
+            )
+          })}
+        </section>
+
+        {/* Contact block */}
+        <section className="mt-4 rounded-2xl bg-white/70 ring-1 ring-black/5 p-4 text-[13px]">
+          <ul className="space-y-2">
+            <li className="flex items-center justify-between gap-3">
+              <span className="text-[#8a7f77]">Доставка</span>
+              <span className="font-medium text-[#4a423c]">Нова пошта · Укрпошта</span>
             </li>
-            <li className="flex items-center gap-3">
-              <Truck className="w-4 h-4 text-neutral-500 shrink-0" />
-              <span className="text-neutral-500">Доставка:</span>
-              <span className="ml-auto font-medium text-neutral-800">Нова пошта та Укрпошта</span>
-            </li>
-            <li className="flex items-center gap-3">
-              <Clock className="w-4 h-4 text-neutral-500 shrink-0" />
-              <span className="text-neutral-500">Графік:</span>
-              <span className="ml-auto font-medium text-neutral-800">онлайн 24/7</span>
+            <li className="flex items-center justify-between gap-3">
+              <span className="text-[#8a7f77]">Графік</span>
+              <span className="font-medium text-[#4a423c]">онлайн 24/7</span>
             </li>
           </ul>
         </section>
 
-        <footer className="mt-10 text-center">
-          <Link href="/" className="text-xs tracking-widest uppercase text-neutral-400 hover:text-neutral-700 transition-colors">
+        {/* Footer */}
+        <footer className="mt-8 flex flex-col items-center gap-1 text-center">
+          <p className="flex items-center gap-1.5 text-[13px] text-[#6f645d]">
+            <Heart className="w-3.5 h-3.5 text-[#c98a94]" fill="currentColor" />
+            Дякуємо, що обираєте нас!
+          </p>
+          <p className="text-[12px] font-semibold text-[#a9707a]">{HANDLE}</p>
+          <Link
+            href="/"
+            className="mt-2 text-[10px] tracking-[0.3em] uppercase text-[#b3a89f] hover:text-[#6f645d] transition-colors"
+          >
             jl-bags · на сайт
           </Link>
         </footer>
