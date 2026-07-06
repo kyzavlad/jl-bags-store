@@ -60,8 +60,8 @@ const SMALL_LINKS: {
   track?: string
 }[] = [
   { label: 'Instagram', href: 'https://instagram.com/sumki_kharkov', Icon: Instagram, external: true, track: 'instagram_click' },
-  { label: 'Facebook', href: 'https://facebook.com/', Icon: Facebook, external: true, track: 'facebook_click' },
-  { label: 'Telegram', href: 'https://t.me/', Icon: Send, external: true, track: 'telegram_click' },
+  { label: 'Facebook', href: 'https://www.facebook.com/sumki.kharkov.julia/', Icon: Facebook, external: true, track: 'facebook_click' },
+  { label: 'Telegram', href: 'https://t.me/joinchat/VGzA____Ogov8wZ_', Icon: Send, external: true, track: 'telegram_click' },
   { label: 'Прайс-лист', href: '/pricelist?key=jlprice2026', Icon: FileText },
   { label: 'Подзвонити', href: `tel:${PHONE}`, Icon: Phone, track: 'phone_click' },
 ]
