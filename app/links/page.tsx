@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import Image from 'next/image'
 import {
   ShoppingBag,
   FileText,
@@ -44,11 +43,13 @@ const STEPS: { n: number; text: string; Icon: typeof MoreHorizontal }[] = [
   { n: 4, text: 'Тепер кнопки працюють', Icon: Check },
 ]
 
+// Real, git-tracked assets in /public. Rendered as CSS background-image so a
+// fetch failure degrades to the labeled cream card instead of a broken <img>.
 const CARDS = [
-  { src: '/hero/hero-1.jpg', alt: 'Жіноча сумка JL Bags' },
-  { src: '/hero/hero-2.jpg', alt: 'Замшева сумка JL Bags' },
-  { src: '/hero/hero-3.jpg', alt: 'Шкіряна сумка JL Bags' },
-  { src: '/about.jpg', alt: 'Колекція сумок JL Bags' },
+  { src: '/hero/hero-1.jpg', label: 'Сумочки для телефону', href: '/catalog/phone-bags' },
+  { src: '/hero/hero-2.jpg', label: 'Замшеві сумки', href: '/catalog/suede-bags' },
+  { src: '/hero/hero-3.jpg', label: 'Жіночі шопери', href: '/catalog/shoppers' },
+  { src: '/about.jpg', label: 'Рюкзаки', href: '/catalog/backpacks' },
 ]
 
 const SMALL_LINKS: {
@@ -70,17 +71,13 @@ export default function LinksPage() {
     <main className="min-h-screen bg-[#f7efe7] text-[#3f3733]">
       <div className="mx-auto w-full max-w-md px-5 py-9">
 
-        {/* Brand */}
+        {/* Brand — pure CSS JL monogram, never a broken image */}
         <header className="flex flex-col items-center text-center">
-          <div className="w-24 h-24 rounded-full overflow-hidden bg-white shadow-sm ring-1 ring-black/5 flex items-center justify-center">
-            <Image
-              src="/logo.png"
-              alt="JL Bags"
-              width={96}
-              height={96}
-              priority
-              className="w-full h-full object-cover"
-            />
+          <div
+            className="w-24 h-24 rounded-full flex items-center justify-center shadow-sm ring-1 ring-[#d8c3b8] bg-gradient-to-br from-[#f3e7dd] to-[#e6d0c3]"
+            aria-hidden
+          >
+            <span className="font-serif text-3xl font-black tracking-tight text-[#a24d5e]">JL</span>
           </div>
           <h1 className="mt-4 text-3xl font-black tracking-tight text-[#2f2925]">JL Bags</h1>
           <p className="mt-1.5 text-[11px] font-semibold uppercase tracking-[0.28em] text-[#a9707a]">
@@ -110,27 +107,27 @@ export default function LinksPage() {
           </div>
         </section>
 
-        {/* Style grid */}
+        {/* Style grid — real images via background-image with labeled fallback */}
         <section className="mt-8" aria-label="Твій стиль щодня">
           <h2 className="text-center text-xl font-black text-[#2f2925]">Твій стиль щодня</h2>
           <p className="mt-1 text-center text-[12px] font-semibold text-[#a9707a]">
             Новинки · Обери свою сумку
           </p>
-          <div className="mt-4 grid grid-cols-4 gap-1.5">
+          <div className="mt-4 grid grid-cols-2 gap-2.5">
             {CARDS.map((c) => (
               <Link
                 key={c.src}
-                href="/catalog"
-                className="relative block aspect-[3/4] overflow-hidden rounded-xl ring-1 ring-black/5 bg-neutral-100"
-                aria-label={c.alt}
+                href={c.href}
+                aria-label={c.label}
+                className="relative block aspect-[4/5] overflow-hidden rounded-2xl ring-1 ring-[#e0d0c5] bg-gradient-to-br from-[#efe2d7] to-[#e2cebf] bg-cover bg-center"
+                style={{ backgroundImage: `url('${c.src}')` }}
               >
-                <Image
-                  src={c.src}
-                  alt={c.alt}
-                  fill
-                  sizes="(max-width: 448px) 25vw, 112px"
-                  className="object-cover"
-                />
+                {/* Bottom scrim + label — doubles as the fallback if the image is absent */}
+                <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/55 to-transparent px-3 pb-2.5 pt-8">
+                  <span className="block text-[12px] font-bold leading-tight text-white drop-shadow-sm">
+                    {c.label}
+                  </span>
+                </span>
               </Link>
             ))}
           </div>
