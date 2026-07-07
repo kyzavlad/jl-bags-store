@@ -4,8 +4,6 @@ import { BioLinks } from '@/components/storefront/bio-links'
 
 export const dynamic = 'force-dynamic'
 
-// /links is kept working; /sumki_kharkov is the intended final URL and is set
-// as the canonical here so search engines consolidate on it.
 export const metadata: Metadata = {
   title: { absolute: 'sumki_kharkov JL™ | Посилання' },
   description: 'Каталог, Instagram, Facebook, Telegram та контакти sumki_kharkov JL™',
@@ -21,6 +19,6 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 }
 
-export default function LinksPage() {
+export default function SumkiKharkovPage() {
   return <BioLinks />
 }
