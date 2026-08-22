@@ -37,7 +37,7 @@ export function SiteFooter() {
               </span>
             </div>
             <p className="text-sm leading-relaxed text-neutral-500">
-              Преміальні жіночі сумки та аксесуари. Натуральні матеріали, бездоганна якість.
+              Сумки на щодень, у яких зійшлися стиль, місткість і чесна ціна. Власне українське виробництво.
             </p>
             <div className="flex items-center gap-4 mt-6">
               <a href={SOCIAL.instagram} target="_blank" rel="noopener noreferrer"
