@@ -1,133 +1,140 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import {
+  ArrowDownRight,
   ArrowRight,
-  Camera,
-  Factory,
+  Check,
   MessageCircle,
-  Package,
-  Truck,
+  PackageCheck,
+  Sparkles,
 } from 'lucide-react'
 
 const PROOFS = [
-  { Icon: Factory, label: 'Власне виробництво' },
-  { Icon: Camera, label: 'Реальні фото товару' },
-  { Icon: Truck, label: 'Швидка відправка' },
-  { Icon: Package, label: 'Обмін протягом 14 днів' },
-]
-
-const BUYING_REASONS = [
-  {
-    eyebrow: 'ВИГЛЯД',
-    title: 'Акуратно й сучасно',
-    text: 'Моделі та кольори, які легко вписати у щоденний образ без зайвої складності.',
-  },
-  {
-    eyebrow: 'ЗРУЧНІСТЬ',
-    title: 'Під Ваш реальний день',
-    text: 'Компактні, місткі, для документів, міста або поїздок — обирайте формат під свій сценарій.',
-  },
-  {
-    eyebrow: 'ЦІННІСТЬ',
-    title: 'Чесна ціна від виробника',
-    text: 'Власне виробництво допомагає тримати доступну ціну без зайвого ланцюжка посередників.',
-  },
+  'Власне виробництво у Харкові',
+  'Реальні фото товару',
+  'Відправка 1–2 робочі дні',
+  'Обмін протягом 14 днів',
 ]
 
 /**
- * Conversion-first hero kept under the historical HeroSlider export so the
- * homepage contract stays stable. The old scroll-heavy carousel led with
- * generic category language; this version leads with the buyer outcome and
- * gives one obvious purchase path plus a low-friction assisted path.
+ * Editorial, buyer-first hero. Kept under the historical HeroSlider export so
+ * the homepage contract remains stable while the visual system can evolve.
  */
 export function HeroSlider() {
   return (
-    <>
-      <section className="relative isolate min-h-[calc(100svh-72px)] overflow-hidden bg-neutral-950 text-white">
-        <div
-          aria-hidden
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: "url('/about.jpg')" }}
-        />
-        <div aria-hidden className="absolute inset-0 bg-black/55" />
-        <div
-          aria-hidden
-          className="absolute inset-0 bg-gradient-to-t from-black via-black/25 to-black/20"
-        />
+    <section className="overflow-hidden bg-[#f3eee6] text-[#171513]">
+      <div className="mx-auto grid min-h-[760px] max-w-[1440px] lg:grid-cols-[0.92fr_1.08fr]">
+        <div className="relative z-10 flex flex-col justify-between px-6 pb-10 pt-14 sm:px-10 sm:pb-14 sm:pt-20 lg:px-14 lg:pb-16 lg:pt-24 xl:px-20">
+          <div className="max-w-2xl">
+            <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-black/10 bg-white/60 px-3.5 py-2 text-[10px] font-semibold uppercase tracking-[0.24em] backdrop-blur-sm sm:text-[11px]">
+              <Sparkles className="h-3.5 w-3.5" strokeWidth={1.7} />
+              JL Bags · сумки для реального дня
+            </div>
 
-        <div className="relative mx-auto flex min-h-[calc(100svh-72px)] w-full max-w-7xl flex-col justify-end px-6 pb-10 pt-24 sm:px-10 sm:pb-14 lg:px-12 lg:pb-16">
-          <div className="max-w-3xl">
-            <p className="mb-5 text-[10px] font-semibold uppercase tracking-[0.34em] text-white/70 sm:text-xs">
-              JL Bags · власне українське виробництво
-            </p>
-
-            <h1 className="text-balance text-4xl font-black leading-[0.98] tracking-[-0.035em] sm:text-6xl lg:text-7xl">
-              Сумка на щодень, у якій зійшлися стиль, місткість і чесна ціна.
+            <h1 className="max-w-[720px] text-[clamp(3.35rem,7vw,7.7rem)] font-black leading-[0.82] tracking-[-0.065em]">
+              Виглядає
+              <span className="block font-serif font-normal italic tracking-[-0.045em]">легко.</span>
+              Вміщує
+              <span className="block">ваш день.</span>
             </h1>
 
-            <p className="mt-6 max-w-2xl text-base leading-relaxed text-white/78 sm:text-lg">
-              Акуратні моделі для роботи, міста й поїздок. Реальні фото, актуальні кольори та швидка відправка по Україні.
+            <p className="mt-8 max-w-xl text-base leading-7 text-black/62 sm:text-lg sm:leading-8">
+              Для міста, роботи й поїздок. Обирайте не просто за формою, а за тим,
+              що носите щодня: потрібний формат, зручні відділення, актуальний вигляд
+              і ціна від виробника.
             </p>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link
                 href="/catalog"
-                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-white px-7 py-3.5 text-sm font-bold text-neutral-950 transition hover:bg-neutral-200"
+                className="group inline-flex min-h-13 items-center justify-center gap-3 rounded-full bg-[#171513] px-7 py-4 text-sm font-semibold text-white transition duration-300 hover:-translate-y-0.5 hover:bg-black"
               >
-                Обрати свою сумку
-                <ArrowRight className="h-4 w-4" />
+                Знайти свою сумку
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Link>
+              <Link
+                href="#scenario"
+                className="group inline-flex min-h-13 items-center justify-center gap-3 rounded-full border border-black/15 bg-white/45 px-7 py-4 text-sm font-semibold text-[#171513] backdrop-blur-sm transition duration-300 hover:bg-white"
+              >
+                Підібрати за сценарієм
+                <ArrowDownRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:translate-y-0.5" />
+              </Link>
+            </div>
+          </div>
+
+          <div className="mt-14 grid grid-cols-2 gap-x-5 gap-y-3 border-t border-black/10 pt-6 sm:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
+            {PROOFS.map((proof) => (
+              <div key={proof} className="flex items-start gap-2 text-xs leading-5 text-black/62">
+                <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-black" strokeWidth={2} />
+                <span>{proof}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="relative min-h-[640px] overflow-hidden border-t border-black/10 lg:min-h-full lg:border-l lg:border-t-0">
+          <div className="absolute inset-0 bg-[#d7cbbc]" />
+
+          <div className="absolute inset-0 grid grid-cols-2 grid-rows-[58%_42%] gap-2 p-2 sm:gap-3 sm:p-3">
+            <div className="group relative col-span-2 overflow-hidden rounded-[1.7rem] sm:rounded-[2.2rem]">
+              <Image
+                src="/hero/hero-2.jpg"
+                alt="Жіноча сумка JL Bags у повсякденному образі"
+                fill
+                priority
+                className="object-cover transition-transform duration-1000 group-hover:scale-[1.025]"
+                sizes="(max-width: 1024px) 100vw, 54vw"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
+              <div className="absolute bottom-5 left-5 max-w-[260px] rounded-2xl border border-white/25 bg-black/25 p-4 text-white backdrop-blur-md sm:bottom-7 sm:left-7">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-white/70">Не навмання</p>
+                <p className="mt-2 text-sm font-medium leading-5">
+                  Спочатку сценарій і місткість. Потім колір і деталі.
+                </p>
+              </div>
+            </div>
+
+            <div className="group relative overflow-hidden rounded-[1.7rem] sm:rounded-[2.2rem]">
+              <Image
+                src="/hero/hero-1.jpg"
+                alt="Деталі жіночої сумки JL Bags"
+                fill
+                className="object-cover transition-transform duration-1000 group-hover:scale-[1.035]"
+                sizes="(max-width: 1024px) 50vw, 27vw"
+              />
+            </div>
+
+            <div className="group relative overflow-hidden rounded-[1.7rem] bg-[#1d1a17] sm:rounded-[2.2rem]">
+              <Image
+                src="/hero/hero-3.jpg"
+                alt="Сумка JL Bags у міському образі"
+                fill
+                className="object-cover opacity-85 transition-transform duration-1000 group-hover:scale-[1.035]"
+                sizes="(max-width: 1024px) 50vw, 27vw"
+              />
+              <div className="absolute inset-0 bg-black/20" />
               <a
                 href="https://ig.me/m/sumki_kharkov"
                 target="_blank"
                 rel="noopener noreferrer"
                 data-track-event="instagram_click"
-                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-white/35 bg-black/20 px-7 py-3.5 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/10"
+                className="absolute bottom-4 left-4 right-4 flex items-center justify-between gap-3 rounded-2xl border border-white/20 bg-white/90 px-4 py-3 text-xs font-semibold text-black backdrop-blur transition hover:bg-white sm:bottom-5 sm:left-5 sm:right-5"
               >
-                <MessageCircle className="h-4 w-4" />
-                Допоможіть підібрати
+                <span className="flex items-center gap-2">
+                  <MessageCircle className="h-4 w-4" />
+                  Допоможіть підібрати
+                </span>
+                <ArrowRight className="h-4 w-4" />
               </a>
             </div>
           </div>
 
-          <div className="mt-10 grid grid-cols-2 gap-2.5 sm:mt-12 sm:grid-cols-4 sm:gap-3">
-            {PROOFS.map(({ Icon, label }) => (
-              <div
-                key={label}
-                className="flex min-h-16 items-center gap-3 rounded-2xl border border-white/15 bg-black/25 px-4 py-3 backdrop-blur-md"
-              >
-                <Icon className="h-4 w-4 shrink-0 text-white/85" strokeWidth={1.6} />
-                <span className="text-xs font-medium leading-snug text-white/85">{label}</span>
-              </div>
-            ))}
+          <div className="absolute right-5 top-5 flex items-center gap-2 rounded-full border border-white/25 bg-white/88 px-4 py-2.5 text-[11px] font-semibold text-black shadow-lg backdrop-blur sm:right-7 sm:top-7">
+            <PackageCheck className="h-4 w-4" strokeWidth={1.8} />
+            Реальний товар
           </div>
         </div>
-      </section>
-
-      <section className="border-b border-neutral-200 bg-[#f7f4ef] py-14 sm:py-16">
-        <div className="mx-auto max-w-7xl px-6 sm:px-10 lg:px-12">
-          <div className="max-w-3xl">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.32em] text-neutral-500">
-              Сумка має працювати на Вас
-            </p>
-            <h2 className="mt-3 text-3xl font-black tracking-tight text-neutral-950 sm:text-4xl">
-              Не обирайте між красивою, зручною та доступною.
-            </h2>
-            <p className="mt-4 max-w-2xl text-sm leading-relaxed text-neutral-600 sm:text-base">
-              Ми зібрали колекцію навколо трьох речей, які важливі у щоденному користуванні: як сумка виглядає, як вона організовує Ваші речі та чи виправдовує свою ціну.
-            </p>
-          </div>
-
-          <div className="mt-8 grid gap-3 md:grid-cols-3">
-            {BUYING_REASONS.map((item) => (
-              <article key={item.title} className="rounded-2xl border border-neutral-200 bg-white p-6">
-                <p className="text-[10px] font-bold tracking-[0.28em] text-neutral-400">{item.eyebrow}</p>
-                <h3 className="mt-3 text-lg font-bold text-neutral-950">{item.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-neutral-600">{item.text}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-    </>
+      </div>
+    </section>
   )
 }
