@@ -22,7 +22,6 @@ import { BRAND, SITE_URL, SAME_AS, OG_IMAGE } from '@/lib/seo'
 import { SiteHeader } from '@/components/storefront/site-header'
 import { SiteFooter } from '@/components/storefront/site-footer'
 import { ProductCard } from '@/components/storefront/product-card'
-import { HeroSlider } from '@/components/storefront/hero-slider'
 import { ReviewsCarousel } from '@/components/storefront/reviews-carousel'
 import { FaqAccordion } from '@/components/storefront/faq-accordion'
 import type { Product } from '@/lib/types'
@@ -115,6 +114,13 @@ const TRUST = [
   { Icon: MapPin, title: 'По всій Україні', text: 'Нова Пошта та Укрпошта' },
 ]
 
+const HOMEPAGE_MEDIA_FALLBACK = [
+  'https://jupgxgcnuafzyxmsoaeq.supabase.co/storage/v1/object/public/product-photos/products/1782466182321-rbdccq.jpg',
+  'https://jupgxgcnuafzyxmsoaeq.supabase.co/storage/v1/object/public/product-photos/products/1782466401846-2plkae.jpg',
+  'https://jupgxgcnuafzyxmsoaeq.supabase.co/storage/v1/object/public/product-photos/products/1782466710469-7ybuzh.jpg',
+  'https://jupgxgcnuafzyxmsoaeq.supabase.co/storage/v1/object/public/product-photos/products/1782466303277-jtlzz8.jpg',
+]
+
 const homeJsonLd = {
   '@context': 'https://schema.org',
   '@graph': [
@@ -176,8 +182,125 @@ async function fetchFeatured(): Promise<Product[]> {
   }
 }
 
+function collectHomepageMedia(products: Product[]): string[] {
+  const sortedPhotos = products.map((product) =>
+    [...(product.product_photos ?? [])].sort(
+      (a, b) => Number(b.is_primary) - Number(a.is_primary) || a.sort_order - b.sort_order,
+    ),
+  )
+
+  const primaryPhotos = sortedPhotos.map((photos) => photos[0]?.url).filter(Boolean) as string[]
+  const detailPhotos = sortedPhotos.flatMap((photos) => photos.slice(1).map((photo) => photo.url)).filter(Boolean)
+
+  return Array.from(new Set([...primaryPhotos, ...detailPhotos, ...HOMEPAGE_MEDIA_FALLBACK])).slice(0, 8)
+}
+
+function HomeHero({ imageSrc }: { imageSrc: string }) {
+  return (
+    <section className="overflow-hidden bg-[#f3eee6] text-[#171513]">
+      <div className="mx-auto grid min-h-[760px] max-w-[1440px] lg:grid-cols-[0.92fr_1.08fr]">
+        <div className="relative z-10 flex flex-col justify-between px-6 pb-10 pt-14 sm:px-10 sm:pb-14 sm:pt-20 lg:px-14 lg:pb-16 lg:pt-24 xl:px-20">
+          <div className="max-w-2xl">
+            <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-black/10 bg-white/60 px-3.5 py-2 text-[10px] font-semibold uppercase tracking-[0.24em] backdrop-blur-sm sm:text-[11px]">
+              <Sparkles className="h-3.5 w-3.5" strokeWidth={1.7} />
+              JL Bags · сумки для реального дня
+            </div>
+
+            <h1 className="max-w-[720px] text-[clamp(3.35rem,7vw,7.7rem)] font-black leading-[0.82] tracking-[-0.065em]">
+              Виглядає
+              <span className="block font-serif font-normal italic tracking-[-0.045em]">легко.</span>
+              Вміщує
+              <span className="block">ваш день.</span>
+            </h1>
+
+            <p className="mt-8 max-w-xl text-base leading-7 text-black/62 sm:text-lg sm:leading-8">
+              Для міста, роботи й поїздок. Обирайте не просто за формою, а за тим,
+              що носите щодня: потрібний формат, зручні відділення, актуальний вигляд
+              і ціна від виробника.
+            </p>
+
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <Link
+                href="/catalog"
+                className="group inline-flex min-h-13 items-center justify-center gap-3 rounded-full bg-[#171513] px-7 py-4 text-sm font-semibold text-white transition duration-300 hover:-translate-y-0.5 hover:bg-black"
+              >
+                Знайти свою сумку
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </Link>
+              <Link
+                href="#scenario"
+                className="group inline-flex min-h-13 items-center justify-center gap-3 rounded-full border border-black/15 bg-white/45 px-7 py-4 text-sm font-semibold text-[#171513] backdrop-blur-sm transition duration-300 hover:bg-white"
+              >
+                Підібрати за сценарієм
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </Link>
+            </div>
+          </div>
+
+          <div className="mt-14 grid grid-cols-2 gap-x-5 gap-y-3 border-t border-black/10 pt-6 sm:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
+            {[
+              'Власне виробництво у Харкові',
+              'Реальні фото товару',
+              'Відправка 1–2 робочі дні',
+              'Обмін протягом 14 днів',
+            ].map((proof) => (
+              <div key={proof} className="flex items-start gap-2 text-xs leading-5 text-black/62">
+                <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-black" strokeWidth={2} />
+                <span>{proof}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="relative min-h-[560px] overflow-hidden border-t border-black/10 bg-[#d7cbbc] p-3 sm:min-h-[640px] sm:p-4 lg:min-h-full lg:border-l lg:border-t-0">
+          <div className="group relative h-full min-h-[536px] overflow-hidden rounded-[2rem] sm:min-h-[608px] sm:rounded-[2.4rem] lg:min-h-[730px]">
+            <Image
+              src={imageSrc}
+              alt="Реальна жіноча сумка JL Bags"
+              fill
+              priority
+              className="object-cover transition-transform duration-1000 group-hover:scale-[1.02]"
+              sizes="(max-width: 1024px) 100vw, 54vw"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/58 via-black/5 to-transparent" />
+
+            <div className="absolute left-5 top-5 flex items-center gap-2 rounded-full border border-white/25 bg-white/90 px-4 py-2.5 text-[11px] font-semibold text-black shadow-lg backdrop-blur sm:left-7 sm:top-7">
+              <PackageCheck className="h-4 w-4" strokeWidth={1.8} />
+              Реальний товар
+            </div>
+
+            <div className="absolute bottom-5 left-5 right-5 flex flex-col gap-3 sm:bottom-7 sm:left-7 sm:right-7 sm:flex-row sm:items-end sm:justify-between">
+              <div className="max-w-sm rounded-2xl border border-white/20 bg-black/32 p-4 text-white backdrop-blur-md sm:p-5">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-white/65">Не навмання</p>
+                <p className="mt-2 text-sm font-medium leading-5 sm:text-base sm:leading-6">
+                  Спочатку сценарій і місткість. Потім колір і деталі.
+                </p>
+              </div>
+
+              <a
+                href="https://ig.me/m/sumki_kharkov"
+                target="_blank"
+                rel="noopener noreferrer"
+                data-track-event="instagram_click"
+                className="inline-flex shrink-0 items-center justify-between gap-3 rounded-full border border-white/20 bg-white/92 px-5 py-3.5 text-xs font-semibold text-black backdrop-blur transition hover:bg-white"
+              >
+                <span className="flex items-center gap-2">
+                  <MessageCircle className="h-4 w-4" />
+                  Допоможіть підібрати
+                </span>
+                <ArrowRight className="h-4 w-4" />
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
 export default async function HomePage() {
   const featured = await fetchFeatured()
+  const homepageMedia = collectHomepageMedia(featured)
 
   return (
     <>
@@ -188,7 +311,7 @@ export default async function HomePage() {
       <SiteHeader />
 
       <main className="bg-[#fbfaf7] text-[#171513]">
-        <HeroSlider />
+        <HomeHero imageSrc={homepageMedia[0]} />
 
         <section className="border-y border-black/10 bg-[#171513] text-white" aria-label="Що важливо у щоденній сумці">
           <div className="mx-auto max-w-[1440px] px-6 py-5 sm:px-10 lg:px-12">
@@ -330,7 +453,7 @@ export default async function HomePage() {
               <div className="grid overflow-hidden rounded-[2.2rem] border border-black/10 bg-white lg:grid-cols-[1fr_1fr]">
                 <div className="relative min-h-[360px] lg:min-h-[480px]">
                   <Image
-                    src="/hero/hero-1.jpg"
+                    src={homepageMedia[1]}
                     alt="Сумки JL Bags"
                     fill
                     className="object-cover"
@@ -386,7 +509,7 @@ export default async function HomePage() {
 
             <div className="relative min-h-[500px] overflow-hidden rounded-[2.5rem] border border-white/10 sm:min-h-[620px]">
               <Image
-                src="/hero/hero-3.jpg"
+                src={homepageMedia[2]}
                 alt="Сумка JL Bags у повсякденному використанні"
                 fill
                 className="object-cover"
@@ -446,7 +569,7 @@ export default async function HomePage() {
             </div>
             <div className="relative min-h-[420px] lg:min-h-[620px]">
               <Image
-                src="/hero/hero-2.jpg"
+                src={homepageMedia[3]}
                 alt="Жіноча сумка JL Bags"
                 fill
                 className="object-cover"
