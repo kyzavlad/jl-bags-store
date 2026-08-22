@@ -1,9 +1,14 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import {
-  Package, Truck, ShieldCheck, Headphones, Sparkles,
-  ArrowRight, Phone, Camera, Handshake, Factory,
-  MapPin, Clock,
+  ArrowRight,
+  Camera,
+  Clock,
+  Factory,
+  MapPin,
+  MessageCircle,
+  Package,
+  Truck,
 } from 'lucide-react'
 import { getServiceSupabase } from '@/lib/supabase/server'
 import { BRAND, SITE_URL, SAME_AS, OG_IMAGE } from '@/lib/seo'
@@ -19,15 +24,14 @@ import type { Product } from '@/lib/types'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  // `absolute` so the root template doesn't append a second "| JL Bags".
-  title: { absolute: 'JL Bags — жіночі сумки від виробника з доставкою по Україні' },
+  title: { absolute: 'JL Bags — жіночі сумки на щодень від українського виробника' },
   description:
-    'JL Bags — жіночі сумки від українського виробника з Харкова: сумочки для телефону, замшеві та еко-шкіряні сумки, шопери, рюкзаки, аксесуари. Доставка Новою Поштою та Укрпоштою по всій Україні.',
+    'JL Bags — стильні та місткі жіночі сумки на щодень від українського виробника. Сумочки для телефону, замшеві та еко-шкіряні моделі, шопери й рюкзаки. Доставка Новою Поштою та Укрпоштою по Україні.',
   alternates: { canonical: SITE_URL },
   openGraph: {
-    title: 'JL Bags — жіночі сумки від виробника',
+    title: 'JL Bags — стиль, місткість і чесна ціна від виробника',
     description:
-      'Жіночі сумки від виробника з Харкова: сумочки для телефону, замшеві та еко-шкіряні моделі, шопери, рюкзаки. Доставка по всій Україні.',
+      'Жіночі сумки на щодень: реальні фото, актуальні кольори, швидка відправка по Україні.',
     url: SITE_URL,
     type: 'website',
     images: [{ url: OG_IMAGE, width: 1339, height: 1339, alt: 'JL Bags — жіночі сумки' }],
@@ -35,27 +39,37 @@ export const metadata: Metadata = {
 }
 
 const WHY_US = [
-  { Icon: Sparkles,    title: 'Преміум якість',  text: 'Натуральні матеріали та бездоганне виконання' },
-  { Icon: Truck,       title: 'Швидка доставка', text: 'Відправка протягом 1–2 робочих днів' },
-  { Icon: ShieldCheck, title: 'Гарантія',        text: 'Обмін та повернення протягом 14 днів' },
-  { Icon: Headphones,  title: 'Підтримка 24/7',  text: 'Завжди готові відповісти на ваші питання' },
+  {
+    Icon: Camera,
+    title: 'Реальний товар',
+    text: 'Показуємо моделі на реальних фото й відео, щоб Ви розуміли розмір, форму та деталі до замовлення.',
+  },
+  {
+    Icon: Package,
+    title: 'Зручно щодня',
+    text: 'Є формати під місто, роботу, документи, короткі поїздки та щоденні справи.',
+  },
+  {
+    Icon: Factory,
+    title: 'Ціна від виробника',
+    text: 'Власне виробництво допомагає тримати доступну ціну без зайвого ланцюжка посередників.',
+  },
+  {
+    Icon: Truck,
+    title: 'Швидка відправка',
+    text: 'Відправляємо Новою Поштою та Укрпоштою по Україні, зазвичай протягом 1–2 робочих днів.',
+  },
 ]
 
-const ABOUT_FEATURES: { Icon: typeof Factory; label: string; text: string }[] = [
-  { Icon: Factory,     label: 'Власне виробництво', text: 'Ми самі виробляємо моделі JL Bags, тому контролюємо якість на кожному етапі.' },
-  { Icon: ShieldCheck, label: 'Контроль якості',    text: 'Працюємо лише з практичними та перевіреними матеріалами, які добре носяться.' },
-  { Icon: Package,     label: 'Стабільна наявність', text: 'Тримаємо складські залишки, щоб партнери не втрачали продажі через відсутність товару.' },
-  { Icon: Camera,      label: 'Контент для продажів', text: 'Надаємо фото та відео моделей для каталогу, сторіс, реклами та маркетплейсів.' },
-  { Icon: Truck,       label: 'Швидкі відправки',   text: 'Оперативно пакуємо та відправляємо замовлення по Україні щодня.' },
-  { Icon: Handshake,   label: 'Опт і дропшипінг',   text: 'Працюємо з бізнесами різного масштабу від малих сторінок до великих магазинів.' },
-]
-
-const STATS = [
-  { value: '100+',   label: 'Актуальних моделей' },
-  { value: '1 день', label: 'Відправка замовлень' },
-  { value: 'B2B',    label: 'Партнерство для бізнесу' },
-  { value: '100%',   label: 'Контроль якості' },
-]
+const CATEGORY_UA: Record<string, string> = {
+  'phone-bags': 'Сумочки для телефону',
+  'suede-bags': 'Замшеві сумки',
+  'leather-bags': 'Шкіряні сумки',
+  'crossbody-bags': 'Сумки через плече',
+  shoppers: 'Шопери',
+  backpacks: 'Рюкзаки',
+  accessories: 'Аксесуари',
+}
 
 const homeJsonLd = {
   '@context': 'https://schema.org',
@@ -71,7 +85,7 @@ const homeJsonLd = {
       telephone: BRAND.phone,
       priceRange: '₴₴',
       description:
-        'Жіночі сумки від українського виробника з Харкова: сумочки для телефону, замшеві та еко-шкіряні моделі, шопери, рюкзаки, аксесуари. Доставка по всій Україні.',
+        'Жіночі сумки на щодень від українського виробника: сумочки для телефону, замшеві та еко-шкіряні моделі, шопери, рюкзаки й аксесуари.',
       areaServed: { '@type': 'Country', name: 'Ukraine' },
       address: {
         '@type': 'PostalAddress',
@@ -117,6 +131,7 @@ async function fetchFeatured(): Promise<Product[]> {
       .eq('stock_status', 'in_stock')
       .order('created_at', { ascending: false })
       .limit(40)
+
     return ((data ?? []) as Product[])
       .filter((p) => (p.product_photos ?? []).length > 0)
       .slice(0, 8)
@@ -130,7 +145,16 @@ export default async function HomePage() {
 
   const usingDbCats = dbCategories.length > 0
   const popularCategories = (
-    usingDbCats ? dbCategories.map((c) => ({ name: c.name, slug: c.slug })) : FALLBACK_CATEGORIES
+    usingDbCats
+      ? dbCategories.map((c) => ({
+          name: c.name,
+          displayName: CATEGORY_UA[c.slug] ?? c.name,
+          slug: c.slug,
+        }))
+      : FALLBACK_CATEGORIES.map((c) => ({
+          ...c,
+          displayName: CATEGORY_UA[c.slug] ?? c.name,
+        }))
   ).slice(0, 12)
 
   return (
@@ -142,17 +166,19 @@ export default async function HomePage() {
       <SiteHeader />
 
       <main>
-        {/* ── HERO ──────────────────────────────────────────────────────────── */}
         <HeroSlider />
 
-        {/* ── POPULAR CATEGORIES ────────────────────────────────────────────── */}
-        <section className="bg-neutral-50 py-20" id="catalog">
-          <div className="max-w-7xl mx-auto px-6">
-            <h2 className="text-4xl sm:text-5xl font-black text-center text-neutral-900 mb-14">
-              Популярні категорії
-            </h2>
-            {/* Flex-wrap + justify-center keeps the final row centered, so 7
-                categories never leave a lonely card stranded on the left. */}
+        <section className="bg-neutral-50 py-16 sm:py-20" id="catalog">
+          <div className="mx-auto max-w-7xl px-6">
+            <div className="mx-auto mb-12 max-w-2xl text-center">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-neutral-500">
+                Оберіть формат під свій день
+              </p>
+              <h2 className="mt-3 text-3xl font-black text-neutral-900 sm:text-5xl">
+                З чого почнемо?
+              </h2>
+            </div>
+
             <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
               {popularCategories.map((c, i) => {
                 const Icon = iconForCategory(c.name)
@@ -161,11 +187,11 @@ export default async function HomePage() {
                   <Link
                     key={`${c.slug}-${i}`}
                     href={href}
-                    className="group flex flex-col items-center justify-center gap-4 rounded-2xl border border-neutral-200 bg-white p-6 aspect-square basis-[calc(50%_-_0.5rem)] sm:basis-[calc(33.333%_-_1rem)] lg:basis-[calc(25%_-_1.125rem)] max-w-[260px] hover:border-black hover:shadow-sm transition-all"
+                    className="group flex aspect-square basis-[calc(50%_-_0.5rem)] flex-col items-center justify-center gap-4 rounded-2xl border border-neutral-200 bg-white p-6 transition-all hover:border-black hover:shadow-sm sm:basis-[calc(33.333%_-_1rem)] lg:basis-[calc(25%_-_1.125rem)] max-w-[260px]"
                   >
-                    <Icon className="w-9 h-9 text-neutral-900" strokeWidth={1.5} />
-                    <span className="text-xs sm:text-sm font-semibold text-center text-neutral-800">
-                      {c.name}
+                    <Icon className="h-9 w-9 text-neutral-900" strokeWidth={1.5} />
+                    <span className="text-center text-xs font-semibold text-neutral-800 sm:text-sm">
+                      {c.displayName}
                     </span>
                   </Link>
                 )
@@ -174,210 +200,149 @@ export default async function HomePage() {
           </div>
         </section>
 
-        {/* ── NEW ARRIVALS / HITS (from DB) ─────────────────────────────────── */}
-        <section className="bg-neutral-50 py-20">
-          <div className="max-w-7xl mx-auto px-6">
-            <div className="flex items-center justify-between gap-4 mb-12">
-              <h2 className="text-3xl sm:text-4xl font-black text-neutral-900">
-                Нові надходження та хіти
-              </h2>
+        <section className="bg-white py-16 sm:py-20">
+          <div className="mx-auto max-w-7xl px-6">
+            <div className="mb-10 flex items-end justify-between gap-4 sm:mb-12">
+              <div>
+                <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-neutral-500">
+                  Можна замовити зараз
+                </p>
+                <h2 className="mt-3 text-3xl font-black text-neutral-900 sm:text-4xl">
+                  Нові моделі та хіти
+                </h2>
+              </div>
               <Link
                 href="/catalog"
-                className="shrink-0 inline-flex items-center gap-2 rounded-full border border-neutral-300 px-5 py-2.5 text-sm font-medium text-neutral-800 hover:bg-black hover:text-white hover:border-black transition-colors"
+                className="inline-flex shrink-0 items-center gap-2 rounded-full border border-neutral-300 px-5 py-2.5 text-sm font-medium text-neutral-800 transition-colors hover:border-black hover:bg-black hover:text-white"
               >
-                Дивитись все <ArrowRight className="w-4 h-4" />
+                Весь каталог <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
 
             {featured.length > 0 ? (
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 sm:gap-8">
+              <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 sm:gap-8 lg:grid-cols-4">
                 {featured.map((p) => (
                   <ProductCard key={p.id} product={p} />
                 ))}
               </div>
             ) : (
-              <div className="rounded-2xl border border-neutral-200 bg-white py-24 text-center">
-                <p className="text-neutral-400">Товари скоро з&apos;являться</p>
+              <div className="rounded-2xl border border-neutral-200 bg-neutral-50 py-24 text-center">
+                <p className="text-neutral-400">Актуальні моделі вже в каталозі</p>
+                <Link
+                  href="/catalog"
+                  className="mt-5 inline-flex items-center gap-2 rounded-full bg-black px-6 py-3 text-sm font-semibold text-white"
+                >
+                  Перейти в каталог <ArrowRight className="h-4 w-4" />
+                </Link>
               </div>
             )}
           </div>
         </section>
 
-        {/* ── WHY CHOOSE US (dark) ──────────────────────────────────────────── */}
-        <section className="bg-neutral-950 text-white py-20">
-          <div className="max-w-7xl mx-auto px-6">
-            <h2 className="text-3xl sm:text-4xl font-black text-center mb-14">Чому обирають нас</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+        <section className="bg-neutral-950 py-16 text-white sm:py-20">
+          <div className="mx-auto max-w-7xl px-6">
+            <div className="mx-auto mb-12 max-w-2xl text-center">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-white/50">
+                Менше сумнівів перед замовленням
+              </p>
+              <h2 className="mt-3 text-3xl font-black sm:text-4xl">Чому JL Bags</h2>
+            </div>
+            <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
               {WHY_US.map((w) => (
-                <div key={w.title} className="text-center">
-                  <div className="w-14 h-14 mx-auto mb-5 rounded-full border border-white/20 flex items-center justify-center">
-                    <w.Icon className="w-6 h-6" strokeWidth={1.5} />
+                <article key={w.title} className="rounded-2xl border border-white/10 bg-white/[0.04] p-6">
+                  <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-full border border-white/15">
+                    <w.Icon className="h-5 w-5" strokeWidth={1.5} />
                   </div>
-                  <h3 className="text-lg font-bold mb-2">{w.title}</h3>
-                  <p className="text-sm text-neutral-400 leading-relaxed">{w.text}</p>
-                </div>
+                  <h3 className="text-lg font-bold">{w.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-neutral-400">{w.text}</p>
+                </article>
               ))}
             </div>
           </div>
         </section>
 
-        {/* ── ABOUT ─────────────────────────────────────────────────────────── */}
-        <section className="bg-neutral-50 py-20" id="about">
-          <div className="max-w-7xl mx-auto px-6">
-            <div className="text-center max-w-2xl mx-auto mb-14">
-              <p className="inline-flex items-center gap-2 text-[11px] tracking-[0.3em] uppercase text-neutral-500 mb-4">
-                <Sparkles className="w-3.5 h-3.5" /> Прямий український виробник
+        <section className="bg-[#f7f4ef] py-16 sm:py-20">
+          <div className="mx-auto grid max-w-7xl gap-8 px-6 lg:grid-cols-[1fr_0.9fr] lg:items-center">
+            <div>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-neutral-500">
+                Не хочете обирати навмання?
               </p>
-              <h2 className="text-3xl sm:text-4xl font-black text-neutral-900 mb-5">Про нас</h2>
-              <p className="text-neutral-600 leading-relaxed">
-                JL Bags — це виробник сумок та рюкзаків. Власне виробництво, контроль якості,
-                стабільна наявність та швидкі відправки по Україні.
+              <h2 className="mt-3 max-w-2xl text-3xl font-black tracking-tight text-neutral-950 sm:text-5xl">
+                Напишіть, що носите з собою — допоможемо підібрати формат.
+              </h2>
+              <p className="mt-5 max-w-2xl text-sm leading-relaxed text-neutral-600 sm:text-base">
+                Підкажемо по розміру, відділеннях, кольорах і актуальній наявності без довгого пошуку по каталогу.
               </p>
-            </div>
-
-            {/* Image + feature cards */}
-            <div className="grid lg:grid-cols-[1fr_minmax(280px,340px)_1fr] gap-6 items-start mb-14">
-              {/* left features */}
-              <div className="flex flex-col gap-4 order-2 lg:order-1">
-                {ABOUT_FEATURES.slice(0, 3).map((f) => (
-                  <div key={f.label} className="flex items-start gap-3 rounded-xl border border-neutral-200 bg-white px-5 py-4">
-                    <f.Icon className="w-5 h-5 shrink-0 mt-0.5 text-neutral-700" strokeWidth={1.5} />
-                    <div>
-                      <p className="text-sm font-bold text-neutral-900">{f.label}</p>
-                      <p className="text-xs text-neutral-500 mt-1 leading-relaxed">{f.text}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* center image */}
-              <div
-                role="img"
-                aria-label="Власне виробництво Julia Lebedeva Collection"
-                className="order-1 lg:order-2 relative aspect-[3/4] rounded-2xl overflow-hidden bg-neutral-200 bg-cover bg-center"
-                style={{ backgroundImage: "url('/about.jpg')" }}
-              />
-
-              {/* right features */}
-              <div className="flex flex-col gap-4 order-3">
-                {ABOUT_FEATURES.slice(3, 6).map((f) => (
-                  <div key={f.label} className="flex items-start gap-3 rounded-xl border border-neutral-200 bg-white px-5 py-4">
-                    <f.Icon className="w-5 h-5 shrink-0 mt-0.5 text-neutral-700" strokeWidth={1.5} />
-                    <div>
-                      <p className="text-sm font-bold text-neutral-900">{f.label}</p>
-                      <p className="text-xs text-neutral-500 mt-1 leading-relaxed">{f.text}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Stats */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
-              {STATS.map((s) => (
-                <div key={s.label} className="rounded-2xl border border-neutral-200 bg-white p-6 text-center">
-                  <p className="text-2xl sm:text-3xl font-black text-neutral-900">{s.value}</p>
-                  <p className="text-xs text-neutral-500 mt-1">{s.label}</p>
-                </div>
-              ))}
-            </div>
-
-            {/* CTAs */}
-            <div className="flex flex-wrap items-center justify-center gap-4">
-              <Link
-                href="/catalog"
-                className="inline-flex items-center gap-2 rounded-full bg-black text-white px-7 py-3.5 text-sm font-medium tracking-wide hover:bg-neutral-800 transition-colors"
+              <a
+                href="https://ig.me/m/sumki_kharkov"
+                target="_blank"
+                rel="noopener noreferrer"
+                data-track-event="instagram_click"
+                className="mt-7 inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-black px-7 py-3.5 text-sm font-bold text-white transition hover:bg-neutral-800"
               >
-                Дивитись каталог <ArrowRight className="w-4 h-4" />
-              </Link>
-              <Link
-                href="/wholesale"
-                className="inline-flex items-center gap-2 rounded-full border border-neutral-300 px-7 py-3.5 text-sm font-medium text-neutral-800 hover:border-black transition-colors"
-              >
-                Опт і дропшипінг
-              </Link>
+                <MessageCircle className="h-4 w-4" />
+                Написати в Instagram
+              </a>
             </div>
+
+            <div
+              role="img"
+              aria-label="Жіноча сумка JL Bags у щоденному образі"
+              className="aspect-[4/3] rounded-3xl bg-neutral-200 bg-cover bg-center lg:aspect-square"
+              style={{ backgroundImage: "url('/about.jpg')" }}
+            />
           </div>
         </section>
 
-        {/* ── REVIEWS ───────────────────────────────────────────────────────── */}
-        <section className="bg-white py-20">
-          <div className="max-w-7xl mx-auto px-6">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl sm:text-4xl font-black text-neutral-900 mb-3">Відгуки клієнтів</h2>
-              <p className="text-neutral-500">Реальні відгуки наших клієнтів</p>
+        <section className="bg-white py-16 sm:py-20">
+          <div className="mx-auto max-w-7xl px-6">
+            <div className="mb-12 text-center">
+              <h2 className="text-3xl font-black text-neutral-900 sm:text-4xl">Відгуки клієнтів</h2>
+              <p className="mt-3 text-neutral-500">Реальний досвід після отримання замовлення</p>
             </div>
             <ReviewsCarousel />
           </div>
         </section>
 
-        {/* ── FAQ ───────────────────────────────────────────────────────────── */}
-        <section className="bg-neutral-50 py-20">
-          <div className="max-w-7xl mx-auto px-6">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl sm:text-4xl font-black text-neutral-900 mb-3">Часті запитання</h2>
-              <p className="text-neutral-500">Коротко зібрали основні відповіді перед замовленням</p>
+        <section className="bg-neutral-50 py-16 sm:py-20">
+          <div className="mx-auto max-w-7xl px-6">
+            <div className="mb-12 text-center">
+              <h2 className="text-3xl font-black text-neutral-900 sm:text-4xl">Перед замовленням</h2>
+              <p className="mt-3 text-neutral-500">Коротко про доставку, оплату та обмін</p>
             </div>
             <FaqAccordion />
           </div>
         </section>
 
-        {/* ── WHOLESALE CTA ─────────────────────────────────────────────────── */}
-        <section className="bg-white py-20">
-          <div className="max-w-7xl mx-auto px-6">
-            <div className="rounded-3xl bg-neutral-950 text-white px-8 sm:px-16 py-16 text-center">
-              <h2 className="text-2xl sm:text-4xl font-black mb-4">Оптові продажі та дропшипінг</h2>
-              <p className="text-neutral-300 max-w-2xl mx-auto mb-8 leading-relaxed">
-                Вигідні умови співпраці для оптовиків та дропшиперів.
-                Персональний підхід до кожного партнера.
-              </p>
-              <Link
-                href="/wholesale"
-                className="inline-flex items-center gap-2 rounded-full bg-white text-black px-8 py-3.5 text-sm font-medium tracking-wide hover:bg-neutral-200 transition-colors"
-              >
-                Дізнатись більше <ArrowRight className="w-4 h-4" />
-              </Link>
-              <p className="mt-8 text-sm text-neutral-400">
-                <a href={`tel:${BRAND.phone}`} className="inline-flex items-center gap-2 hover:text-white transition-colors">
-                  <Phone className="w-4 h-4" /> {BRAND.phoneDisplay}
-                </a>
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* ── LOCAL INFO / TRUST (Google Business Profile support) ───────────── */}
-        <section className="bg-neutral-50 border-t border-neutral-200 py-12" aria-label="Інформація про магазин">
-          <div className="max-w-7xl mx-auto px-6">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-center sm:text-left">
-              <div className="flex items-start gap-3 justify-center sm:justify-start">
-                <MapPin className="w-5 h-5 text-neutral-900 shrink-0 mt-0.5" strokeWidth={1.5} />
+        <section className="border-t border-neutral-200 bg-white py-12" aria-label="Інформація про магазин">
+          <div className="mx-auto max-w-7xl px-6">
+            <div className="grid grid-cols-1 gap-8 text-center sm:grid-cols-2 sm:text-left lg:grid-cols-4">
+              <div className="flex items-start justify-center gap-3 sm:justify-start">
+                <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-neutral-900" strokeWidth={1.5} />
                 <div>
                   <p className="text-sm font-bold text-neutral-900">JL Bags</p>
-                  <p className="text-sm text-neutral-500 mt-0.5">{BRAND.city} · {BRAND.serviceArea}</p>
+                  <p className="mt-0.5 text-sm text-neutral-500">{BRAND.city} · вся Україна</p>
                 </div>
               </div>
-              <div className="flex items-start gap-3 justify-center sm:justify-start">
-                <Truck className="w-5 h-5 text-neutral-900 shrink-0 mt-0.5" strokeWidth={1.5} />
+              <div className="flex items-start justify-center gap-3 sm:justify-start">
+                <Factory className="mt-0.5 h-5 w-5 shrink-0 text-neutral-900" strokeWidth={1.5} />
+                <div>
+                  <p className="text-sm font-bold text-neutral-900">Виробництво</p>
+                  <p className="mt-0.5 text-sm text-neutral-500">Власні моделі JL Bags</p>
+                </div>
+              </div>
+              <div className="flex items-start justify-center gap-3 sm:justify-start">
+                <Truck className="mt-0.5 h-5 w-5 shrink-0 text-neutral-900" strokeWidth={1.5} />
                 <div>
                   <p className="text-sm font-bold text-neutral-900">Доставка</p>
-                  <p className="text-sm text-neutral-500 mt-0.5">{BRAND.delivery.join(' · ')}</p>
+                  <p className="mt-0.5 text-sm text-neutral-500">Нова пошта · Укрпошта</p>
                 </div>
               </div>
-              <div className="flex items-start gap-3 justify-center sm:justify-start">
-                <Clock className="w-5 h-5 text-neutral-900 shrink-0 mt-0.5" strokeWidth={1.5} />
+              <div className="flex items-start justify-center gap-3 sm:justify-start">
+                <Clock className="mt-0.5 h-5 w-5 shrink-0 text-neutral-900" strokeWidth={1.5} />
                 <div>
-                  <p className="text-sm font-bold text-neutral-900">Графік</p>
-                  <p className="text-sm text-neutral-500 mt-0.5">Замовлення онлайн 24/7</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3 justify-center sm:justify-start">
-                <Phone className="w-5 h-5 text-neutral-900 shrink-0 mt-0.5" strokeWidth={1.5} />
-                <div>
-                  <p className="text-sm font-bold text-neutral-900">Телефон</p>
-                  <a href={`tel:${BRAND.phone}`} className="text-sm text-neutral-500 mt-0.5 hover:text-black transition-colors">
-                    {BRAND.phoneDisplay}
-                  </a>
+                  <p className="text-sm font-bold text-neutral-900">Замовлення</p>
+                  <p className="mt-0.5 text-sm text-neutral-500">онлайн 24/7</p>
                 </div>
               </div>
             </div>
