@@ -1,314 +1,475 @@
-# JL Bags — Strategic Marketing Direction
+# JL Bags — Strategic Marketing System
 
-Updated: 2026-08-22
+**Status:** canonical working strategy  
+**Updated:** 2026-08-22  
+**Scope:** B2C Ukraine first. Wholesale remains a separate path and must not dominate the retail journey.
+
+## 0. Evidence standard
 
-## Objective
+This document deliberately separates what is known from what is still a hypothesis.
+
+### Confirmed from the business / production site
+- JL Bags is positioned as a Ukrainian handbag manufacturer in Kharkiv.
+- The current storefront has retail categories including phone bags, suede bags, eco-leather/leather bags, crossbody bags, shoppers, backpacks and accessories.
+- The business already uses real product photography, customer-review assets, Instagram, phone ordering, Nova Poshta/Ukrposhta delivery and a 14-day exchange message.
+
+### Confirmed from external market voice
+Public Ukrainian handbag reviews repeatedly use language around:
+- "містка / вмістка";
+- "легка";
+- "зручний розмір";
+- "багато відділень / карманів";
+- "відповідає фото";
+- "якісно пошита";
+- "виглядає якісно / гарно";
+- "за таку ціну супер";
+- compact bags that still fit "все необхідне".
+
+This external research is useful for hypotheses and page architecture, but it is **not a substitute for JL Bags customer interviews**.
+
+### Pending validation
+We have not yet completed CIA decision-moment interviews with JL Bags customers. Therefore any claim about the *single* biggest purchase barrier is marked as an evidence-backed hypothesis, not a proven internal fact.
+
+---
+
+# 1. Strategic Marketing Campus process applied
+
+The Campus process is not “pick an ad angle.” It starts upstream:
+
+1. Identify the problem.
+2. Build the target buyer profile.
+3. Research market voice.
+4. Fill the five-category research template: **Current State / Dream State / Roadblocks / Solutions / Products**.
+5. Audit competitors and top players.
+6. Identify the mismatch.
+7. Validate with insiders / CIA interviews.
+8. Run the Winner's Writing Process.
+9. Map the three thresholds: **Value / Certainty / Trust**.
+10. Build one funnel where every section moves the buyer to the next mental step.
+11. Launch, measure and trace results back to the research decision that produced them.
+
+The previous JL Bags approach was too close to tactics: model → creative → ad → message. This system changes the unit of strategy from **product attributes** to **buyer state and decision barrier**.
+
+---
+
+# 2. WHO — target buyer, psychographically
+
+## Core buyer
+
+A woman in Ukraine shopping online for an everyday bag who wants three things at the same time:
+
+1. it should look current and neat;
+2. it should actually fit and organize the things she carries;
+3. it should feel like a smart purchase, not an expensive status purchase and not a cheap compromise.
+
+The useful segmentation is not primarily age or city. It is **job-to-be-done + current frustration + desired experience**.
+
+## Four high-value buying contexts
+
+### A. “Усе потрібне зі мною” — daily organizer
+**Situation:** work, city, errands, documents, long day.  
+**Wants:** enough capacity, useful compartments, easy access, not bulky.  
+**Market language:** “містка”, “багато відділень”, “зручний розмір”, “все необхідне”.  
+**Fear:** beautiful outside, chaotic or too small inside.  
+**Best product paths:** shoppers, larger crossbody, structured everyday bags.
 
-Move JL Bags from repeated model-by-model ad launches to one coherent customer-led marketing system:
+### B. “Вигляд без переплати” — value-conscious style buyer
+**Situation:** wants to refresh an everyday look without paying a premium-brand markup.  
+**Wants:** current silhouette, versatile color, neat finish, sensible price.  
+**Market language:** “гарна”, “виглядає якісно”, “акуратно”, “за таку ціну супер”.  
+**Fear:** affordable price will look visibly cheap.  
+**Best proof:** close real photos, finishing details, own production, reviews.
 
-**Market voice → positioning → offer → creative → landing/product page → conversation → order → revenue**
+### C. “Без сюрпризів онлайн” — cautious online buyer
+**Situation:** likes the product, but hesitates before ordering from an unfamiliar store/brand.  
+**Wants:** confidence that the real item matches the expectation.  
+**Market language:** “відповідає фото”, “якісно пошита”, “шви акуратні”.  
+**Fear:** wrong scale, color, quality, hardware, strap, lining, exchange friction.  
+**Best proof:** real photography, on-body context, clear delivery/exchange, reviews, visible contact channels.
 
-This document is the working source of truth for positioning and acquisition decisions. Advertising platforms are distribution channels, not the strategy.
+### D. “Лише необхідне” — compact utility buyer
+**Situation:** walk, travel, quick errands, wants free hands.  
+**Wants:** a small bag that still fits phone, wallet, keys and essentials.  
+**Market language:** “невелика, але містка”, “можна покласти все необхідне”.  
+**Fear:** compact means unusably tiny.  
+**Best product paths:** phone bags, compact crossbody.
 
-## 1. What changed in our diagnosis
+---
 
-The old public message was mostly category and product information:
+# 3. Five-category market research template
 
-- women's bags
-- new collection
-- premium quality
-- materials / dimensions / compartments
+## Current State
+- Sees many visually similar “stylish women’s bags.”
+- Product/category names do not answer how the bag fits her actual day.
+- It is difficult to infer real scale and capacity from a single isolated product photo.
+- Low price can create doubt about material, hardware and finish.
+- She may feel forced to trade off looks vs capacity vs organization vs price.
 
-That is useful after interest exists, but weak as the first reason to choose JL Bags.
+## Dream State
+- “I can immediately tell this bag fits my day.”
+- It looks current without being difficult to style.
+- It carries the essentials without looking bulky.
+- The inside organization makes sense.
+- The online order feels predictable and safe.
+- The purchase feels like good value rather than a compromise.
 
-The strategic-marketing research model is built around five customer questions:
+## Roadblocks
+1. “Will it look like the photo in real life?”
+2. “Will the size be right for what I carry?”
+3. “Will affordable materials/hardware look cheap?”
+4. “Are the pockets/compartments actually useful?”
+5. “Will it be comfortable in daily use?”
+6. “What happens if I choose the wrong format?”
 
-1. Current state
-2. Dream state
-3. Roadblocks
-4. Solutions
-5. Products / offers
+## Solutions already known to the market
+The buyer already understands categories such as crossbody, shopper, backpack, phone bag, tote. We do not need to educate her that these solutions exist.
 
-The customer language and competitive landscape should determine the message, rather than starting from product specifications.
+The marketing job is to help her answer: **which solution fits my day, and can I trust this specific product/store?**
 
-## 2. Market voice found in public buyer reviews
+## Products / evaluation criteria
+The buyer evaluates competing products by:
+- visual fit with her style;
+- capacity relative to apparent bulk;
+- internal organization;
+- material/finish confidence;
+- price/value;
+- delivery and exchange friction;
+- trust in the seller.
 
-Research sample: Ukrainian bag reviews and current product listings on Rozetka and Prom, plus established Ukrainian bag sellers.
+---
 
-Repeated buyer language clusters:
+# 4. Competitive mismatch
 
-### Desired outcomes
+## What the category commonly says
+Competitor language clusters around:
+- stylish;
+- practical;
+- quality;
+- own production;
+- fair price;
+- large assortment;
+- Ukrainian brand.
 
-- attractive / stylish / neat appearance
-- roomy despite a compact or neat shape
-- comfortable for everyday use
-- enough compartments and pockets
-- suitable for work, walking, documents and everyday errands
-- good price-to-quality relationship
-- fast dispatch
-- product matches the photos and stated dimensions
+Those claims are useful, but highly interchangeable.
 
-### Roadblocks / objections
+## Stronger top-player behavior
+More mature brands tend to sell a more specific experience: minimalism, identity, conscious design, everyday behavior, warranty, functional use, or a strong editorial point of view.
 
-- a low price can create fear of poor material, weak hardware or bad stitching
-- a bag may look good but be too small or poorly organized
-- a roomy bag may look bulky
-- photos can create the wrong expectation of size, color or finish
-- artificial leather quality and wear are common concerns
-- missing pockets, weak straps or inconvenient compartments create disappointment after purchase
+## JL Bags opportunity
+Do not try to win by shouting “stylish + quality + fair price” louder.
 
-### Strategic implication
+Win by making selection easier and online purchase more certain:
 
-The buyer is not simply buying "a women's bag". She is trying to avoid a compromise:
+> **Start from the buyer’s day → show the right format → remove uncertainty → ask for the order.**
 
-**I want it to look good, carry what I actually need, feel convenient every day and still be worth the money.**
+The website, Meta creatives, product content and Direct sales should all follow this same chain.
 
-That is a much stronger brand-level conversation than "premium quality" or a list of dimensions.
+---
 
-## 3. Target-market map
+# 5. Positioning
 
-Do not reduce the audience to age/gender. The useful segmentation is psychographic and based on the buying job.
+## Primary brand line
 
-### Primary segment — practical style seeker
+> **Виглядає легко. Вміщує ваш день.**
 
-**Current state**
-- wants to update an everyday bag without spending heavily
-- sees many similar products and has trouble telling which will actually be good
-- often has to choose between appearance, capacity and price
+Why this is stronger:
+- “виглядає” addresses style without generic “стильні сумки” language;
+- “вміщує ваш день” turns capacity into a lived outcome;
+- it naturally opens scenario-based navigation;
+- it creates a reason to show what fits, compartments and on-body context;
+- it works for both compact and spacious products.
 
-**Dream state**
-- a bag that makes the everyday outfit feel put together
-- enough room for the real contents of her day
-- easy to wear and easy to match
-- feels like a smart purchase, not an overpayment
+## Support line
 
-**Roadblocks**
-- "cheap" may mean cheap-looking or short-lived
-- uncertainty about real size and capacity
-- uncertainty whether the photo is representative
-- too many nearly identical marketplace options
+> **JL Bags — сумки для міста, роботи й поїздок: зручні формати, реальний товар, актуальний вигляд і ціна від виробника.**
 
-**What wins her**
-- real visual proof
-- clear use case
-- capacity / compartment demonstration
-- price anchored to practical value
-- confidence about availability, dispatch and exchange
+## What should NOT become the headline
+- “premium quality” without proof;
+- “new collection” as the main promise;
+- “own production” as the entire brand idea;
+- “best prices”;
+- a list of materials/categories.
 
-### Secondary segment — organizer / function buyer
+Own production is a **reason to believe**, not the customer’s dream state.
 
-This customer leads with practicality. She responds to:
+---
 
-- multiple compartments
-- A4 / documents / daily essentials
-- easy access to phone, wallet and small items
-- specific demonstrations of what fits
+# 6. Where the buyer is now — Awareness × Attention
 
-Models such as JL 5421 fit this segment particularly well because the product has three main zip compartments plus additional internal and external pockets.
+## Meta / Instagram
+**Attention:** passive. She is not necessarily looking for a bag at that second.  
+**Awareness:** usually problem-aware or category-aware, but not JL-aware.
 
-### Secondary segment — scenario buyer
+Therefore the first job is recognition, not catalog explanation.
 
-The purchase starts from a situation rather than a bag category:
+Strong openings should name a lived situation:
+- “Коли в сумці нарешті все має своє місце.”
+- “Містка, але не виглядає громіздкою.”
+- “Сумка на день, коли телефон — це найменша річ, яку треба взяти.”
+- “На фото гарна. А що реально поміститься?”
 
-- for work
-- for the city
-- for a short trip
-- for documents
-- for everyday errands
-- small but roomy
+Then bridge to the model and proof.
 
-Creative and product copy should use the scenario only when the actual model supports it.
+## Google Search
+**Attention:** active.  
+**Awareness:** solution/product aware.
 
-## 4. Positioning
+Search intent should land on the closest category/product, not the generic homepage where possible.
+Examples:
+- “містка жіноча сумка” → spacious formats;
+- “сумка через плече жіноча” → crossbody;
+- “маленька сумка для телефону” → phone bags;
+- brand query → brand/home/product.
+
+---
 
-### Brand positioning
+# 7. Three thresholds
+
+## Threshold 1 — Value / Desire
+Question in buyer’s head: **“Is this relevant enough to me to keep going?”**
+
+Triggers:
+- scenario she recognizes;
+- visible attractive product;
+- “fits my day” language;
+- price/value when relevant.
+
+## Threshold 2 — Certainty
+Question: **“Will this specific bag actually work for me?”**
+
+**Evidence-backed hypothesis: this is the biggest gap for cold B2C traffic.**
 
-**JL Bags — сумки на щодень, у яких зійшлися стиль, місткість і чесна ціна.**
+Why: public review language heavily references capacity, dimensions/size, compartments, photo match and construction quality. Those are certainty questions, not awareness questions.
+
+Triggers:
+- real product photos;
+- on-body/lifestyle scale;
+- what-fits / compartment demonstration;
+- product detail closeups;
+- category selection by scenario;
+- review proof.
 
-Supporting idea:
+## Threshold 3 — Trust
+Question: **“Will this business deliver what it promises?”**
 
-**Власне виробництво. Реальні фото товару. Моделі під реальний день. Швидка відправка по Україні.**
+Triggers:
+- own production / location;
+- real customer reviews;
+- visible phone/social channels;
+- delivery terms;
+- 14-day exchange;
+- consistent modern storefront and product presentation.
 
-The goal is not to position JL Bags as the cheapest option and not to imitate a luxury brand. The useful middle ground is:
+---
 
-**a smart, attractive, practical purchase directly from a Ukrainian manufacturer.**
+# 8. Winner's Writing Process — JL Bags homepage
 
-This is more defensible than generic "premium quality" and makes the low-to-mid price range an advantage without making the brand feel disposable.
+## Q1. Who are we targeting?
+The core everyday-bag buyer described above, with four scenario contexts.
 
-## 5. Offer architecture
+## Q2. Where are they now?
+They have seen many bags, know category names, but have low certainty about which format will fit their daily use and whether the online product will match expectations.
 
-The offer should not be "a bag + a price".
+## Q3. What action do we want?
+Primary: **open the relevant catalog/category and inspect products.**  
+Secondary: **ask for assisted selection in Instagram.**
 
-Each promoted model should answer five questions quickly:
+We do not ask cold traffic for a large leap before they have enough certainty.
 
-1. **Why should I care?** — identity, scenario or pain/desire hook
-2. **Why this model?** — visual / functional proof
-3. **Why believe it?** — real product footage, actual compartments, colors, size
-4. **Why JL Bags?** — own production, availability, dispatch, exchange
-5. **What do I do next?** — one clear CTA: choose / write in Direct / order
+## Q4. What must happen in their mind?
+1. “This brand understands the kind of day I have.”
+2. “There is a format here that fits what I carry.”
+3. “I can judge the real product, not just an ad.”
+4. “Other buyers received real products and the store is accountable.”
+5. “The order/exchange risk is low enough.”
+6. “I know what to click next.”
 
-No permanent discount is required. The core value stack is:
+## Q5. What triggers each step?
+1. Hero: **“Виглядає легко. Вміщує ваш день.”**
+2. Scenario selector: work / city / essentials / travel.
+3. Real-photo and certainty section.
+4. Review carousel + own-production proof.
+5. Shipping/exchange FAQ and trust rail.
+6. Clear catalog CTA + assisted Instagram CTA.
 
-- real product and real video
-- clear use-case
-- practical details shown, not merely listed
-- direct-manufacturer value
-- quick low-friction contact
+Every homepage section must have one job in this mental chain. Decorative sections with no decision role should be removed.
 
-## 6. Awareness × attention strategy
+---
 
-### Meta / Instagram / Facebook
+# 9. Website architecture implemented
 
-Most social viewers have **passive attention**. They are not currently searching Google for a particular bag.
+## Hero
+Purpose: recognition + desire.
+- strong editorial identity;
+- real photography collage;
+- one primary CTA: find a bag;
+- one lower-friction CTA: choose by scenario;
+- proof rail immediately visible.
 
-Use an **interrupt funnel**:
+## Market-language rail
+Purpose: instant self-recognition.
+- light + spacious;
+- useful size;
+- everything has a place;
+- matches the photo;
+- looks neat.
 
-**Hook around an existing desire or frustration → show the product as the bridge → proof → clear CTA**
+## Scenario selector
+Purpose: translate the buyer’s day into product navigation.
+- work/documents;
+- city/errands;
+- essentials only;
+- travel/long day.
 
-Examples of different strategic angles, not just different edits:
+## Certainty section
+Purpose: answer the biggest cold-traffic doubt before asking for purchase.
+- see the real product;
+- understand whether the format fits the day;
+- reduce online-order risk.
 
-- **Identity / style:** "Сумка, яка збирає образ без зайвих зусиль"
-- **Organization:** "Коли у сумці нарешті все має своє місце"
-- **Value:** "Виглядає акуратно. Коштує 395 грн"
-- **Scenario:** "На роботу, у місто і на кожен день"
+## Product section
+Purpose: move from desire to concrete products.
+If product feed is unavailable, never show a giant empty placeholder. Fall back to a designed catalog bridge.
 
-Only one main hypothesis should change per test so we can learn what caused the result.
+## Production/value section
+Purpose: reason to believe price + product are credible.
 
-### Google Search
+## Reviews
+Purpose: social proof / trust.
 
-Search users have **active attention** and are more solution-aware.
+## Assisted selection
+Purpose: convert people who want the outcome but do not want to browse.
+Prompt is concrete: tell us what you carry, then get a format recommendation.
 
-Use a search funnel:
+## FAQ / trust rail
+Purpose: lower transaction friction at the end of the journey.
 
-**search intent → relevant category/model page → proof + price + availability → action**
+---
 
-Do not send every keyword to a generic homepage if a better category or product page exists.
+# 10. Offer architecture
 
-Priority intent groups should be built around real search demand, for example:
+The offer is not “a handbag.” It is the complete purchase experience:
 
-- жіночі сумки купити
-- жіночі сумки Україна
-- жіноча сумка екошкіра
-- сумка через плече жіноча
-- містка жіноча сумка
-- сумка жіноча Харків
+**Desired outcome**  
+A bag that looks right and carries the real day.
 
-Exact campaign terms must be validated in Google Ads Keyword Planner / search-term data before scaling.
+**Proof / certainty**  
+Real product photography + scenario fit + customer reviews.
 
-## 7. Website conversion direction
+**Risk reduction**  
+Clear delivery + exchange.
 
-### Implemented first pass
+**Low-friction path**  
+Catalog if she knows what she wants; Instagram selection if she does not.
 
-The homepage hero has been changed from generic collection language to the customer outcome:
+No invented discounts or artificial scarcity should be added without real stock/pricing data.
 
-**"Сумка на щодень, у якій зійшлися стиль, місткість і чесна ціна."**
+---
 
-It now immediately communicates:
+# 11. Creative system
 
-- own Ukrainian production
-- everyday scenarios
-- real product photos
-- quick dispatch
-- primary CTA to choose a bag
-- assisted CTA to ask for help in Instagram
+Each model should have a small creative matrix rather than one repeated ad.
 
-A second section reframes the choice around the three recurring buyer criteria:
+## Angle A — Capacity / organization
+Hook: lived frustration.  
+Proof: what fits + compartments.  
+CTA: inspect model/category.
 
-- appearance
-- convenience / fit for real life
-- value / price
+## Angle B — Appearance / value
+Hook: neat look without premium markup.  
+Proof: on-body shot + close details + price.  
+CTA: inspect colors/model.
 
-### Next conversion priorities
+## Angle C — Online certainty
+Hook: “what will it actually look like?”  
+Proof: real photo/video, dimensions/on-body if available, review.  
+CTA: order / ask in Direct.
 
-After the new positioning has real traffic:
+## Angle D — Scenario
+Hook: work / travel / errands / essentials.  
+Proof: specific contents and carrying method.  
+CTA: category or model.
 
-1. align product pages with the same promise
-2. add stronger capacity / use-case proof where product data supports it
-3. route paid traffic to the most relevant category or product rather than always homepage
-4. make Direct / manager contact the obvious action where checkout is not yet the purchase path
-5. collect real customer language and add proof from actual buyers
+A model is not a strategy. The **buyer motive** determines which creative is made.
 
-## 8. Creative system
+---
 
-For every hero model, collect enough footage to create different hypotheses:
+# 12. CIA validation plan — required next research layer
 
-- person wearing / carrying it
-- front / back / side
-- opening the bag
-- every compartment
-- what fits inside
-- strap / handles
-- close-up of material and hardware
-- available colors
+The Campus requires insider validation because external reviews are not JL Bags customers.
 
-Then test messages, not cosmetic edits.
+Interview or message 5–10 recent retail buyers. Do not ask “did you like the bag?” Ask about the decision moment.
 
-### Example: JL 5421
+## Questions
+1. What was happening when you decided you needed another bag?
+2. What were you carrying / what did the old bag fail at?
+3. What other bags or stores did you compare us with?
+4. What almost stopped you from ordering?
+5. What did you need to see or know before you felt comfortable ordering?
+6. Why did you pick this specific model?
+7. What surprised you after receiving it?
+8. If you recommended it to a friend, what exact words would you use?
 
-Known facts:
+## Extraction
+For every interview save exact phrases under:
+- Current State;
+- Dream State;
+- Roadblocks;
+- Alternatives/Solutions;
+- Product decision;
+- Value threshold;
+- Certainty threshold;
+- Trust threshold.
 
-- 395 UAH
-- eco-leather
-- 32 × 20 × 8 cm
-- three main zip compartments
-- two front magnetic pockets
-- rear zip pocket
-- internal open pocket + zip pocket
+Then update the copy only when repeated customer language beats the current hypothesis.
 
-Best initial hypotheses:
+---
 
-**A — organization**
-"Три основні відділення + кишені всередині й зовні. Коли у сумці все нарешті на своєму місці."
+# 13. Measurement
 
-**B — value**
-"Сумка по ціні трьох чашок кави — 395 грн."
+Do not judge the new system only by “messages this month.” Track the chain.
 
-**C — daily utility**
-"Містка сумка на кожен день без відчуття великої сумки."
+## Website
+- homepage → catalog CTR;
+- homepage → scenario/category CTR;
+- product views;
+- assisted-selection Instagram clicks;
+- phone/Telegram clicks;
+- product → contact/order action where instrumented;
+- device split.
 
-The winning hypothesis is the one that produces profitable orders, not merely the cheapest click.
+## Paid traffic
+For every creative store:
+- target motive;
+- awareness/attention state;
+- hook;
+- model;
+- landing destination;
+- spend;
+- CTR;
+- product-view rate;
+- conversation/order outcome.
 
-## 9. Measurement
+The winning lesson must be written as a **buyer insight**, not merely “video #3 won.”
 
-The canonical weekly view should be:
+Example: “Capacity-first creative wins with cold traffic for this model” is reusable. “Ad 3 had 1.8% CTR” is only an observation.
 
-| Model | Angle | Creative | Spend | Conversations | Conversation cost | Orders | Revenue | Gross margin | CAC |
-|---|---|---|---:|---:|---:|---:|---:|---:|---:|
+---
 
-Until a direct checkout is the dominant path, model codes and Direct conversations are the practical bridge between ad attribution and real sales.
+# 14. Guardrails
 
-Optimization decisions:
+1. Never invent product qualities that are not supported by real product data.
+2. Never invent scarcity, reviews, discounts, warranties or stock urgency.
+3. Do not call something leather if the actual material is eco-leather.
+4. Do not let wholesale messaging dominate B2C pages.
+5. Do not choose channels before defining WHO + state + action.
+6. Do not rewrite the entire positioning every month. Update only when CIA data or performance evidence invalidates a hypothesis.
+7. Treat this file as the canonical marketing source for JL Bags until replaced by a newer validated version.
 
-- cheap conversations + no orders = not a winner
-- expensive conversations + strong order value can still be a winner
-- no scaling without confirmed order economics
-- keep a control creative when testing a new angle
+---
 
-## 10. Research gap to close with client data
+# 15. Current strategic sentence
 
-Public research gives a strong first map, but the next unfair advantage is the brand's own buyers.
+**For Ukrainian women choosing an everyday bag online, JL Bags should make the decision easier by organizing the shopping journey around the buyer’s real day and removing uncertainty about usefulness and the real product.**
 
-We need to continuously harvest from real Direct/order conversations:
-
-- what made the customer stop on this model
-- what she asked before ordering
-- what almost stopped the purchase
-- what other model / store she compared it with
-- what she says after receiving it
-
-Those phrases should become the copy library for ads, product pages and Google landing pages.
-
-## Public research references
-
-- Rozetka buyer reviews for roomy everyday shoulder bags and eco-leather bags
-- Prom buyer reviews for low-price women's crossbody bags
-- Current Ukrainian manufacturer / retailer positioning and pricing
-- JL Bags' public Telegram / social positioning and current product posts
-
-Research URLs used in the August 2026 pass:
-
-- https://rozetka.com.ua/ua/400607808/p400607808/comments/
-- https://rozetka.com.ua/ua/484664209/p484664209/comments/
-- https://rozetka.com.ua/ua/393145422/p393145422/
-- https://prom.ua/ua/p1377564085-zhenskaya-sumochka-plechevom.html
-- https://t.me/joinchat/VGzA____Ogov8wZ_
+That is the strategy. The site, ads, content and Direct sales are executions of it.
