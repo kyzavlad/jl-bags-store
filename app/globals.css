@@ -29,3 +29,10 @@ body {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* Homepage hero: keep the two columns visually continuous on desktop. */
+@media (min-width: 1024px) {
+  main[class*="bg-[#fbfaf7]"] > section:first-child[class*="bg-[#f3eee6]"] > div > div:last-child {
+    border-left-width: 0 !important;
+  }
+}
