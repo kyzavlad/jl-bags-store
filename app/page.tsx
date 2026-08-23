@@ -252,7 +252,7 @@ function HomeHero({ imageSrc }: { imageSrc: string }) {
           </div>
         </div>
 
-        <div className="relative min-h-[560px] overflow-hidden border-t border-black/10 bg-[#d7cbbc] p-3 sm:min-h-[640px] sm:p-4 lg:min-h-full lg:border-l lg:border-t-0">
+        <div className="relative min-h-[560px] overflow-hidden border-t border-black/10 bg-[#f3eee6] p-3 sm:min-h-[640px] sm:p-4 lg:min-h-full lg:border-l lg:border-t-0">
           <div className="group relative h-full min-h-[536px] overflow-hidden rounded-[2rem] sm:min-h-[608px] sm:rounded-[2.4rem] lg:min-h-[730px]">
             <Image
               src={imageSrc}
@@ -582,11 +582,8 @@ export default async function HomePage() {
         <section className="bg-[#fbfaf7] py-20 sm:py-28">
           <div className="mx-auto max-w-[1120px] px-6 sm:px-10">
             <div className="mb-10 text-center sm:mb-12">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.26em] text-black/35">
-                Перед замовленням
-              </p>
-              <h2 className="mt-4 text-4xl font-black tracking-[-0.04em] sm:text-5xl">
-                Відповіді без дрібного шрифту
+              <h2 className="text-4xl font-black tracking-[-0.04em] sm:text-5xl">
+                Часті запитання
               </h2>
             </div>
             <FaqAccordion />
