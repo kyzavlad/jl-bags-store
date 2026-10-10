@@ -39,20 +39,30 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.8,
     }))
 
-    // Active products that have at least one photo (worthwhile to index)
-    const { data: products } = await supabase
-      .from('products')
-      .select('id, updated_at, product_photos(id)')
-      .eq('is_active', true)
-
-    const productUrls: MetadataRoute.Sitemap = (products ?? [])
-      .filter((p: any) => ((p.product_photos as any[]) ?? []).length > 0)
-      .map((p: any) => ({
-        url: `${SITE_URL}/product/${p.id}`,
-        lastModified: p.updated_at ? new Date(p.updated_at) : new Date(),
-        changeFrequency: 'weekly' as const,
-        priority: 0.6,
-      }))
+    // Query active products independently of nested photo joins. A failed
+    // joined query previously returned no sitemap products even though the
+    // storefront had live product pages. Keep the query paginated so Supabase
+    // row limits cannot silently omit large catalogs.
+    const productUrls: MetadataRoute.Sitemap = []
+    const pageSize = 500
+    for (let from = 0; ; from += pageSize) {
+      const { data: products, error } = await supabase
+        .from('products')
+        .select('id, updated_at')
+        .eq('is_active', true)
+        .order('id', { ascending: true })
+        .range(from, from + pageSize - 1)
+      if (error) throw error
+      for (const p of products ?? []) {
+        productUrls.push({
+          url: `${SITE_URL}/product/${p.id}`,
+          lastModified: p.updated_at ? new Date(p.updated_at) : new Date(),
+          changeFrequency: 'weekly',
+          priority: 0.6,
+        })
+      }
+      if (!products || products.length < pageSize) break
+    }
 
     return [...base, ...categoryUrls, ...productUrls]
   } catch {
