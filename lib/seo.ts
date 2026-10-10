@@ -1,6 +1,7 @@
-export const SITE_URL = (
-  process.env.NEXT_PUBLIC_SITE_URL || 'https://jl-bags-store.vercel.app'
-).replace(/\/$/, '')
+// Single public canonical host: apex jlbags.com.ua redirects 308 to www.
+// Keep canonicals, Product JSON-LD, sitemap <loc>, and robots sitemap aligned
+// with the verified Search Console URL-prefix property.
+export const SITE_URL = 'https://www.jlbags.com.ua'
 
 export const BRAND = {
   name: 'JL Bags',
