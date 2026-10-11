@@ -14,7 +14,21 @@ import type { Category, Product } from '@/lib/types'
 
 export const dynamic = 'force-dynamic'
 
-type Props = { params: { slug: string } }
+// Real pagination keeps the entire inventory reachable via crawlable HTML links.
+const PAGE_SIZE = 48
+
+type Props = { params: { slug: string }; searchParams?: { page?: string | string[] } }
+
+function readPage(raw: string | string[] | undefined): number {
+  if (raw === undefined) return 1
+  if (typeof raw !== 'string' || !/^[1-9][0-9]{0,3}$/.test(raw)) return 0
+  const page = Number(raw)
+  return page <= 1000 ? page : 0
+}
+
+function categoryPageUrl(slug: string, page: number): string {
+  return page <= 1 ? `/catalog/${slug}` : `/catalog/${slug}?page=${page}`
+}
 
 const CATEGORY_CONTEXT: Record<string, { eyebrow: string; promise: string; guidance: string }> = {
   'phone-bags': {
@@ -65,19 +79,23 @@ const fetchCategory = cache(async (slug: string): Promise<Category | null> => {
   return data ?? null
 })
 
-async function fetchProducts(categoryId: string): Promise<Product[]> {
+async function fetchProducts(categoryId: string, page: number): Promise<{ items: Product[]; total: number }> {
   const supabase = getServiceSupabase()
-  const { data } = await supabase
+  const offset = (page - 1) * PAGE_SIZE
+  const { data, count, error } = await supabase
     .from('products')
-    .select('*, product_photos(*)')
+    .select('*, product_photos(*)', { count: 'exact' })
     .eq('category_id', categoryId)
     .eq('is_active', true)
     .order('code', { ascending: true })
-    .limit(200)
-  return (data ?? []) as Product[]
+    .order('id', { ascending: true })
+    .range(offset, offset + PAGE_SIZE - 1)
+  if (error) throw error
+  return { items: (data ?? []) as Product[], total: count ?? 0 }
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
+  const page = readPage(searchParams?.page)
   const meta = CATEGORY_META[params.slug]
 
   let dbName: string | null = null
@@ -92,14 +110,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const generated = name ? categorySeo(name) : null
   const title = meta?.title ?? generated?.title ?? 'Каталог жіночих сумок — JL Bags'
   const description = meta?.intro ?? generated?.description ?? 'Жіночі сумки JL Bags. Доставка по Україні.'
-  const canonical = `${SITE_URL}/catalog/${params.slug}`
+  const canonical = `${SITE_URL}${categoryPageUrl(params.slug, Math.max(1, page))}`
+  const paginatedTitle = page > 1 ? `${title} — сторінка ${page}` : title
 
   return {
-    title: { absolute: title },
+    title: { absolute: paginatedTitle },
     description,
     alternates: { canonical },
     openGraph: {
-      title,
+      title: paginatedTitle,
       description,
       url: canonical,
       type: 'website',
@@ -109,7 +128,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-export default async function CategoryPage({ params }: Props) {
+export default async function CategoryPage({ params, searchParams }: Props) {
+  const page = readPage(searchParams?.page)
+  if (!page) notFound()
   let category: Category | null = null
   try {
     category = await fetchCategory(params.slug)
@@ -119,11 +140,21 @@ export default async function CategoryPage({ params }: Props) {
   if (!category) notFound()
 
   let products: Product[] = []
+  let totalProducts = 0
   try {
-    products = await fetchProducts(category.id)
+    const result = await fetchProducts(category.id, page)
+    products = result.items
+    totalProducts = result.total
   } catch {
     /* Render a useful contact state if the product query fails. */
   }
+  const totalPages = Math.ceil(totalProducts / PAGE_SIZE)
+  if (page > 1 && (page > totalPages || products.length === 0)) notFound()
+  const visibleStart = Math.max(1, Math.min(page - 2, totalPages - 4))
+  const visiblePages = Array.from(
+    { length: Math.min(totalPages, 5) },
+    (_, i) => visibleStart + i,
+  )
 
   const meta = CATEGORY_META[params.slug]
   const h1 = meta?.h1 ?? category.name
@@ -184,7 +215,7 @@ export default async function CategoryPage({ params }: Props) {
 
               <div className="mt-10 grid grid-cols-2 gap-3 border-t border-black/10 pt-6 sm:grid-cols-3">
                 <div>
-                  <p className="text-2xl font-black">{products.length}</p>
+                  <p className="text-2xl font-black">{totalProducts}</p>
                   <p className="mt-1 text-[10px] uppercase tracking-[0.16em] text-black/35">моделей у категорії</p>
                 </div>
                 <div>
@@ -303,6 +334,33 @@ export default async function CategoryPage({ params }: Props) {
                   <ProductCard key={product.id} product={product} />
                 ))}
               </div>
+            )}
+
+            {totalPages > 1 && (
+              <nav aria-label="Сторінки товарів" className="mt-12 flex flex-wrap items-center justify-center gap-2">
+                {page > 1 && (
+                  <Link href={categoryPageUrl(params.slug, page - 1)} className="rounded-full border border-black/15 px-4 py-2.5 text-sm font-semibold hover:bg-[#efe8de]">
+                    Попередня
+                  </Link>
+                )}
+                {visiblePages.map((number) => (
+                  <Link
+                    key={number}
+                    href={categoryPageUrl(params.slug, number)}
+                    aria-current={number === page ? 'page' : undefined}
+                    className={number === page
+                      ? 'rounded-full bg-[#171513] px-4 py-2.5 text-sm font-semibold text-white'
+                      : 'rounded-full border border-black/15 px-4 py-2.5 text-sm font-semibold hover:bg-[#efe8de]'}
+                  >
+                    {number}
+                  </Link>
+                ))}
+                {page < totalPages && (
+                  <Link href={categoryPageUrl(params.slug, page + 1)} className="rounded-full border border-black/15 px-4 py-2.5 text-sm font-semibold hover:bg-[#efe8de]">
+                    Наступна
+                  </Link>
+                )}
+              </nav>
             )}
           </div>
         </section>
