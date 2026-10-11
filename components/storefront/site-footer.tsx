@@ -5,6 +5,7 @@ import { BRAND, SOCIAL } from '@/lib/seo'
 
 const INFO_LINKS = [
   { label: 'Каталог', href: '/catalog' },
+  { label: 'Як обрати сумку', href: '/guides/yak-obraty-sumku-na-shchoden' },
   { label: 'Доставка та оплата', href: '/delivery-payment' },
   { label: 'Оптовикам', href: '/wholesale' },
 ]
